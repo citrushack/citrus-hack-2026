@@ -1,11 +1,10 @@
 "use client";
-import { signIn } from "next-auth/react";
+import { signInWithGoogle } from "@/utils/auth/auth-client";
 
 interface props {
   callback: string;
 }
 
-const SignIn = ({ callback }: props) =>
-  void signIn("google", { callbackUrl: callback });
+const SignIn = ({ callback }: props) => void signInWithGoogle(callback);
 
 export default SignIn;

@@ -1,6 +1,6 @@
-import { authenticate } from "@/utils/auth";
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "@/utils/firebase";
+import { authenticate } from "@/utils/auth/auth";
+import { ensureAppTables, pool } from "@/utils/db";
+import { randomUUID } from "crypto";
 
 export const POST = async (req: Request) => {
   const { auth, message } = await authenticate({
@@ -17,12 +17,12 @@ export const POST = async (req: Request) => {
   const { idea, languages, details, contact } = await req.json();
 
   try {
-    await addDoc(collection(db, "ideas"), {
-      idea,
-      languages,
-      details,
-      contact,
-    });
+    await ensureAppTables();
+    await pool.query(
+      `INSERT INTO ideas (id, title, languages, details, contact)
+       VALUES ($1, $2, $3::jsonb, $4, $5)`,
+      [randomUUID(), idea, JSON.stringify(languages), details, contact],
+    );
     return Response.json({ message: "OK" }, { status: 200 });
   } catch (err) {
     return Response.json(

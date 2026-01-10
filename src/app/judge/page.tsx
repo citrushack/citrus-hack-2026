@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/utils/auth/auth-client";
 import Link from "next/link";
 import Image from "next/image";
 import image1 from "@/public/engineering/hackathon/judgeAssets1.webp";

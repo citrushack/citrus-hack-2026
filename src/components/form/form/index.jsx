@@ -4,7 +4,7 @@ import { useState } from "react";
 import Status from "./status";
 import Questions from "./questions";
 import Confirmation from "./confirmation";
-import { signOut } from "next-auth/react";
+import { signOut } from "@/utils/auth/auth-client";
 import Image from "next/image";
 import LOGO from "@/app/favicon.ico";
 import { Button } from "@/components/ui/button";
@@ -32,7 +32,7 @@ const Form = ({
         <Button asChild>
           <Link href="/">Back to Home</Link>
         </Button>
-        <Button onClick={() => signOut({ callbackUrl: "/", redirect: true })}>
+        <Button onClick={() => signOut("/")}>
           Sign Out
         </Button>
       </div>

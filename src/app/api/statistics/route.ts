@@ -1,5 +1,4 @@
-import { db } from "@/utils/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { ensureAppTables, pool } from "@/utils/db";
 import { AGES, DIETS, GENDERS, SHIRTS } from "@/data/form/information";
 
 const labels: string[] = [
@@ -25,24 +24,27 @@ const statuses: string[] = ["-1", "0", "1"];
 type heatmap = Record<string, Record<string, Record<string, number[]>>>;
 
 export const GET = async () => {
-  const snapshot = await getDocs(collection(db, "statistics"));
+  await ensureAppTables();
+  const { rows } = await pool.query("SELECT key, data FROM statistics");
 
   const heatmaps: heatmap = {};
 
-  snapshot.forEach((doc) => {
-    const data = doc.data();
-    heatmaps[doc.id] = {};
+  rows.forEach((row) => {
+    const data = row.data || {};
+    heatmaps[row.key] = {};
 
     labels.forEach((label: string) => {
-      heatmaps[doc.id][label] = {};
+      heatmaps[row.key][label] = {};
 
       statuses.forEach((status: string) => {
-        heatmaps[doc.id][label][status] = [];
+        heatmaps[row.key][label][status] = [];
 
-        const results = data[label][status];
-        const values: number[] = orders[doc.id].map((key) => results[key]);
+        const results = data[label]?.[status] || {};
+        const values: number[] = orders[row.key].map(
+          (key) => results[key] ?? 0,
+        );
 
-        heatmaps[doc.id][label][status] = values;
+        heatmaps[row.key][label][status] = values;
       });
     });
   });

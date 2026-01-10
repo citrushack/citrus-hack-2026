@@ -3,6 +3,15 @@
 # jetbrains
 .idea/
 
+# llms
+AGENTS.md
+
+# postgres data
+/postgres-data
+
+# better auth
+/better-auth_migrations
+
 # dependencies
 /node_modules
 /.pnp

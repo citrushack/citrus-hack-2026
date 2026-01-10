@@ -1,13 +1,5 @@
-import {
-  collection,
-  doc,
-  query,
-  setDoc,
-  getDocs,
-  where,
-} from "firebase/firestore";
-import { db } from "@/utils/firebase";
 import { AGES, DIETS, GENDERS, SHIRTS } from "@/data/form/information";
+import { ensureAppTables, pool } from "@/utils/db";
 
 const roles = [
   "participants",
@@ -28,13 +20,15 @@ const orders = {
 };
 
 const getStatistic = async (role, status, statistic) => {
-  const snapshot = await getDocs(
-    query(collection(db, "users"), where(`roles.${role}`, "==", status)),
+  await ensureAppTables();
+  const { rows } = await pool.query(
+    `SELECT "${statistic}" AS value
+     FROM "user"
+     WHERE COALESCE((roles->>$1)::int, -2) = $2`,
+    [role, status],
   );
 
-  const results = [];
-
-  snapshot.forEach((doc) => results.push(doc.data()[statistic]));
+  const results = rows.map((row) => row.value);
 
   const frequency = {};
 
@@ -50,6 +44,7 @@ const getStatistic = async (role, status, statistic) => {
 };
 
 export const GET = async () => {
+  await ensureAppTables();
   const heatmaps = {};
 
   for (const statistic of Object.keys(orders)) {
@@ -68,10 +63,16 @@ export const GET = async () => {
     }
   }
 
-  await setDoc(doc(db, "statistics", "shirt"), heatmaps["shirt"]);
-  await setDoc(doc(db, "statistics", "gender"), heatmaps["gender"]);
-  await setDoc(doc(db, "statistics", "age"), heatmaps["age"]);
-  await setDoc(doc(db, "statistics", "diet"), heatmaps["diet"]);
+  await Promise.all(
+    Object.entries(heatmaps).map(([key, value]) =>
+      pool.query(
+        `INSERT INTO statistics (key, data)
+         VALUES ($1, $2::jsonb)
+         ON CONFLICT (key) DO UPDATE SET data = EXCLUDED.data`,
+        [key, JSON.stringify(value)],
+      ),
+    ),
+  );
 
   return Response.json(heatmaps);
 };

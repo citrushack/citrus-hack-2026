@@ -1,21 +1,7 @@
 import { NextResponse } from "next/server";
-import { db } from "@/utils/firebase";
-import {
-  collection,
-  getDocs,
-  doc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  orderBy,
-  limit,
-  getCountFromServer,
-  startAfter,
-  query,
-  where,
-} from "firebase/firestore";
 import { authenticate } from "@/utils/auth";
 import { AUTH } from "@/data/admin/dashboard";
+import { ensureAppTables, pool } from "@/utils/db";
 
 export const GET = async (req) => {
   const size = req.nextUrl.searchParams.get("size");
@@ -34,50 +20,56 @@ export const GET = async (req) => {
   const output = [];
 
   try {
-    let snapshot;
-    if (last !== "undefined") {
-      const lastDocument = await getDoc(doc(db, "resumes", last));
+    await ensureAppTables();
+    const sizeValue = parseInt(size || "0", 10) || 50;
+    let rows = [];
 
-      snapshot = await getDocs(
-        query(
-          collection(db, "resumes"),
-          orderBy("status"),
-          where("status", "in", [-1, 0, 1]),
-          startAfter(lastDocument),
-          limit(size),
-        ),
+    if (last !== "undefined") {
+      const lastResult = await pool.query(
+        "SELECT status FROM resumes WHERE id = $1",
+        [last],
       );
+      const lastStatus = lastResult.rows[0]?.status;
+      const result = await pool.query(
+        `SELECT id, first_name, last_name, email, school, grade, resume, status
+         FROM resumes
+         WHERE status IN (-1, 0, 1)
+           AND (status, id) > ($1, $2)
+         ORDER BY status, id
+         LIMIT $3`,
+        [lastStatus, last, sizeValue],
+      );
+      rows = result.rows;
     } else {
-      snapshot = await getDocs(
-        query(
-          collection(db, "resumes"),
-          orderBy("status"),
-          where("status", "in", [-1, 0, 1]),
-          limit(size),
-        ),
+      const result = await pool.query(
+        `SELECT id, first_name, last_name, email, school, grade, resume, status
+         FROM resumes
+         WHERE status IN (-1, 0, 1)
+         ORDER BY status, id
+         LIMIT $1`,
+        [sizeValue],
       );
+      rows = result.rows;
     }
 
-    snapshot.forEach((doc) => {
-      const { firstName, lastName, email, school, grade, resume, status } =
-        doc.data();
+    rows.forEach((row) => {
       output.push({
-        uid: doc.id,
-        firstName,
-        lastName,
-        email,
-        school,
-        grade,
-        resume,
-        status,
+        uid: row.id,
+        firstName: row.first_name,
+        lastName: row.last_name,
+        email: row.email,
+        school: row.school,
+        grade: row.grade,
+        resume: row.resume,
+        status: row.status,
       });
     });
 
-    const countFromServer = await getCountFromServer(
-      query(collection(db, "resumes"), where("status", "in", [-1, 0, 1])),
+    const countResult = await pool.query(
+      "SELECT COUNT(*)::int AS count FROM resumes WHERE status IN (-1, 0, 1)",
     );
 
-    const total = countFromServer.data().count;
+    const total = countResult.rows[0]?.count || 0;
     const lastDoc = output.length > 0 ? output[output.length - 1].uid : "";
 
     return res.json(
@@ -111,11 +103,13 @@ export const PUT = async (req) => {
   const { objects, status } = await req.json();
 
   try {
+    await ensureAppTables();
     await Promise.all(
       objects.map(async (object) => {
-        await updateDoc(doc(db, "resumes", object.uid), {
-          status: status,
-        });
+        await pool.query("UPDATE resumes SET status = $1 WHERE id = $2", [
+          status,
+          object.uid,
+        ]);
       }),
     );
 
@@ -140,9 +134,10 @@ export const DELETE = async (req) => {
     );
   }
   try {
+    await ensureAppTables();
     await Promise.all(
       objects.map(async (object) => {
-        await deleteDoc(doc(db, "resumes", object));
+        await pool.query("DELETE FROM resumes WHERE id = $1", [object]);
       }),
     );
     return res.json({ message: "OK" }, { status: 200 });

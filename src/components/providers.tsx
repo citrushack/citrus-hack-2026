@@ -1,16 +1,13 @@
 "use client";
-import { Session as SessionType } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SidebarProvider } from "./ui/sidebar";
 
 type props = {
   children: React.ReactNode;
-  session: SessionType | null;
 };
 
-const Providers = ({ children, session }: props) => {
+const Providers = ({ children }: props) => {
   const [client] = useState(
     () =>
       new QueryClient({
@@ -21,11 +18,9 @@ const Providers = ({ children, session }: props) => {
   );
 
   return (
-    <SessionProvider session={session} refetchOnWindowFocus={false}>
-      <QueryClientProvider client={client}>
-        <SidebarProvider>{children}</SidebarProvider>
-      </QueryClientProvider>
-    </SessionProvider>
+    <QueryClientProvider client={client}>
+      <SidebarProvider>{children}</SidebarProvider>
+    </QueryClientProvider>
   );
 };
 

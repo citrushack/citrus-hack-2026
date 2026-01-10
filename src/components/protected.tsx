@@ -3,12 +3,12 @@ import Fault from "@/utils/error";
 import Navigation from "@/components/navigation";
 import { headers } from "next/headers";
 import SignIn from "@/utils/signin";
-import { Session as SessionType } from "next-auth";
+import type { getSession } from "@/utils/auth/auth";
 
 interface props {
   children: React.ReactNode;
   restrictions: Record<string, number[]>;
-  session: SessionType | null;
+  session: Awaited<ReturnType<typeof getSession>>;
 }
 
 const ProtectedPage = async ({ children, restrictions, session }: props) => {
@@ -27,14 +27,16 @@ const ProtectedPage = async ({ children, restrictions, session }: props) => {
     );
   }
 
-  if (!session.user.roles && Object.keys(restrictions).length > 0) {
+  const roles = (session.user as { roles?: Record<string, number> }).roles;
+
+  if (!roles && Object.keys(restrictions).length > 0) {
     throw new Fault(403, "Unauthorized", "You do not have any assigned roles");
   }
 
   const authorized = Object.entries(restrictions).some(([key, values]) =>
     Array.isArray(values)
-      ? values.includes(session.user.roles[key])
-      : session.user.roles[key] === values,
+      ? values.includes(roles?.[key])
+      : roles?.[key] === values,
   );
 
   if (!authorized && Object.keys(restrictions).length > 0) {

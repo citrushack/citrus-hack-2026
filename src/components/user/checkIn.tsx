@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/utils/auth/auth-client";
 import { Label } from "@/components/ui/label";
 
 const CheckinPage = () => {

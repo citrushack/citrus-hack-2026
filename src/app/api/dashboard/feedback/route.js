@@ -1,21 +1,8 @@
 import { NextResponse } from "next/server";
-import { db } from "@/utils/firebase";
-import {
-  addDoc,
-  collection,
-  getDocs,
-  doc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  orderBy,
-  limit,
-  getCountFromServer,
-  query,
-  where,
-} from "firebase/firestore";
 import { authenticate } from "@/utils/auth";
 import { AUTH } from "@/data/admin/dashboard";
+import { ensureAppTables, pool } from "@/utils/db";
+import { randomUUID } from "crypto";
 
 export const POST = async (req) => {
   const res = NextResponse;
@@ -38,15 +25,21 @@ export const POST = async (req) => {
   } = await req.json();
 
   try {
-    await addDoc(collection(db, "feedback"), {
-      rating: parseInt(rating),
-      additionalComments,
-      eventSource,
-      improvements,
-      notBeneficial,
-      helpful,
-      status: 0,
-    });
+    await ensureAppTables();
+    await pool.query(
+      `INSERT INTO feedback
+       (id, rating, additional_comments, event_source, improvements, not_beneficial, helpful, status)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 0)`,
+      [
+        randomUUID(),
+        parseInt(rating, 10),
+        additionalComments,
+        eventSource,
+        improvements,
+        notBeneficial,
+        helpful,
+      ],
+    );
     return res.json({ message: "OK" }, { status: 200 });
   } catch (err) {
     return res.json(
@@ -73,57 +66,56 @@ export const GET = async (req) => {
   const output = [];
 
   try {
-    let snapshot;
-    if (last !== "undefined") {
-      const lastDocument = await getDoc(doc(db, "feedback", last));
+    await ensureAppTables();
+    const sizeValue = parseInt(size || "0", 10) || 50;
+    let rows = [];
 
-      snapshot = await getDocs(
-        query(
-          collection(db, "feedback"),
-          orderBy("status"),
-          where("status", "in", [-1, 0, 1]),
-          startAfter(lastDocument),
-          limit(size),
-        ),
+    if (last !== "undefined") {
+      const lastResult = await pool.query(
+        "SELECT status FROM feedback WHERE id = $1",
+        [last],
       );
+      const lastStatus = lastResult.rows[0]?.status;
+      const result = await pool.query(
+        `SELECT id, rating, additional_comments, event_source, improvements, not_beneficial, helpful, status
+         FROM feedback
+         WHERE status IN (-1, 0, 1)
+           AND (status, id) > ($1, $2)
+         ORDER BY status, id
+         LIMIT $3`,
+        [lastStatus, last, sizeValue],
+      );
+      rows = result.rows;
     } else {
-      snapshot = await getDocs(
-        query(
-          collection(db, "feedback"),
-          orderBy("status"),
-          where("status", "in", [-1, 0, 1]),
-          limit(size),
-        ),
+      const result = await pool.query(
+        `SELECT id, rating, additional_comments, event_source, improvements, not_beneficial, helpful, status
+         FROM feedback
+         WHERE status IN (-1, 0, 1)
+         ORDER BY status, id
+         LIMIT $1`,
+        [sizeValue],
       );
+      rows = result.rows;
     }
 
-    snapshot.forEach((doc) => {
-      const {
-        rating,
-        additionalComments,
-        eventSource,
-        improvements,
-        notBeneficial,
-        helpful,
-        status,
-      } = doc.data();
+    rows.forEach((row) => {
       output.push({
-        uid: doc.id,
-        rating,
-        additionalComments,
-        eventSource,
-        improvements,
-        notBeneficial,
-        helpful,
-        status,
+        uid: row.id,
+        rating: row.rating,
+        additionalComments: row.additional_comments,
+        eventSource: row.event_source,
+        improvements: row.improvements,
+        notBeneficial: row.not_beneficial,
+        helpful: row.helpful,
+        status: row.status,
       });
     });
 
-    const countFromServer = await getCountFromServer(
-      query(collection(db, "feedback"), where("status", "in", [-1, 0, 1])),
+    const countResult = await pool.query(
+      "SELECT COUNT(*)::int AS count FROM feedback WHERE status IN (-1, 0, 1)",
     );
 
-    const total = countFromServer.data().count;
+    const total = countResult.rows[0]?.count || 0;
     const lastDoc = output.length > 0 ? output[output.length - 1].uid : "";
 
     return res.json(
@@ -157,11 +149,13 @@ export const PUT = async (req) => {
   const { objects, status } = await req.json();
 
   try {
+    await ensureAppTables();
     await Promise.all(
       objects.map(async (object) => {
-        await updateDoc(doc(db, "feedback", object.uid), {
-          status: status,
-        });
+        await pool.query("UPDATE feedback SET status = $1 WHERE id = $2", [
+          status,
+          object.uid,
+        ]);
       }),
     );
 
@@ -186,9 +180,10 @@ export const DELETE = async (req) => {
     );
   }
   try {
+    await ensureAppTables();
     await Promise.all(
       objects.map(async (object) => {
-        await deleteDoc(doc(db, "feedback", object));
+        await pool.query("DELETE FROM feedback WHERE id = $1", [object]);
       }),
     );
     return res.json({ message: "OK" }, { status: 200 });

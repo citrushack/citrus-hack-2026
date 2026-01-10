@@ -1,5 +1,5 @@
 "use client";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/utils/auth/auth-client";
 
 const Header = () => {
   const { data: session } = useSession();

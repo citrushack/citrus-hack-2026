@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { db } from "@/utils/firebase";
-import { doc, getDoc, updateDoc, addDoc, collection } from "firebase/firestore";
 import { authenticate } from "@/utils/auth";
 import { AUTH } from "@/data/user/team";
+import { ensureAppTables, pool } from "@/utils/db";
+import { randomUUID } from "crypto";
 
 export const POST = async (req) => {
   const res = NextResponse;
@@ -17,6 +17,8 @@ export const POST = async (req) => {
   }
 
   try {
+    await ensureAppTables();
+    const teamId = randomUUID();
     const newTeam = {
       links: {
         github: "",
@@ -33,14 +35,25 @@ export const POST = async (req) => {
       ],
       status: 0,
     };
-    const docRef = await addDoc(collection(db, "teams"), newTeam);
-    await updateDoc(doc(db, "users", user.id), {
-      team: docRef.id,
-    });
+    await pool.query(
+      `INSERT INTO teams (id, name, status, links, members)
+       VALUES ($1, $2, $3, $4::jsonb, $5::jsonb)`,
+      [
+        teamId,
+        newTeam.name,
+        newTeam.status,
+        JSON.stringify(newTeam.links),
+        JSON.stringify(newTeam.members),
+      ],
+    );
+    await pool.query(`UPDATE "user" SET "team" = $1 WHERE id = $2`, [
+      teamId,
+      user.id,
+    ]);
     return res.json(
       {
         message: "OK",
-        id: docRef.id,
+        id: teamId,
       },
       { status: 200 },
     );
@@ -69,15 +82,18 @@ export const PUT = async (req) => {
   } = await req.json();
 
   try {
-    await updateDoc(doc(db, "teams", user.team), {
-      name: name,
-      links: {
-        github: github,
-        figma: figma,
-        devpost: devpost,
-      },
-      members: members,
-    });
+    await ensureAppTables();
+    await pool.query(
+      `UPDATE teams
+       SET name = $1, links = $2::jsonb, members = $3::jsonb
+       WHERE id = $4`,
+      [
+        name,
+        JSON.stringify({ github, figma, devpost }),
+        JSON.stringify(members),
+        user.team,
+      ],
+    );
     return res.json({ message: "OK" }, { status: 200 });
   } catch (err) {
     return res.json(
@@ -101,10 +117,14 @@ export const GET = async (req) => {
   const team = req.nextUrl.searchParams.get("teamid");
 
   try {
-    const snapshot = await getDoc(doc(db, "teams", team));
-    if (!snapshot.exists())
+    await ensureAppTables();
+    const { rows } = await pool.query(
+      "SELECT links, members, name FROM teams WHERE id = $1",
+      [team],
+    );
+    if (!rows.length)
       return res.json({ message: "Invalid Team ID" }, { status: 500 });
-    const { links, members, name } = snapshot.data();
+    const { links, members, name } = rows[0];
     return res.json(
       {
         message: "OK",

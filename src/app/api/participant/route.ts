@@ -1,7 +1,6 @@
-import { db } from "@/utils/firebase";
-import { doc, updateDoc } from "firebase/firestore";
-import { authenticate } from "@/utils/auth";
 import { AUTH } from "@/data/user/participant";
+import { authenticate } from "@/utils/auth/auth";
+import { ensureAppTables, pool } from "@/utils/db";
 
 export const POST = async (req: Request) => {
   const { auth, message, user } = await authenticate(AUTH.POST);
@@ -23,17 +22,32 @@ export const POST = async (req: Request) => {
   }
 
   try {
-    await updateDoc(doc(db, "users", user.id), {
-      phone: phone,
-      major: major,
-      age: age,
-      country: country,
-      school: school,
-      grade: grade,
-      gender: gender,
-      shirt: shirt,
-      diet: diet,
-    });
+    await ensureAppTables();
+    await pool.query(
+      `UPDATE "user"
+       SET "phone" = $1,
+           "major" = $2,
+           "age" = $3,
+           "country" = $4,
+           "school" = $5,
+           "grade" = $6,
+           "gender" = $7,
+           "shirt" = $8,
+           "diet" = $9
+       WHERE id = $10`,
+      [
+        phone,
+        major,
+        age,
+        country,
+        school,
+        grade,
+        gender,
+        shirt,
+        diet,
+        user.id,
+      ],
+    );
     return Response.json({ message: "OK" }, { status: 200 });
   } catch (err) {
     return Response.json(

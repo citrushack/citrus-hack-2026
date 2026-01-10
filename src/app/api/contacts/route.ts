@@ -1,6 +1,5 @@
-import { authenticate } from "@/utils/auth";
-import { db } from "@/utils/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { authenticate } from "@/utils/auth/auth";
+import { ensureAppTables, pool } from "@/utils/db";
 import { NextRequest, NextResponse } from "next/server";
 
 type contact = {
@@ -30,12 +29,15 @@ export const GET = async (req: NextRequest) => {
   const output: contact[] = [];
 
   try {
-    const snapshot = await getDocs(
-      query(collection(db, "users"), where(`roles.${role}`, "==", status)),
+    await ensureAppTables();
+    const { rows } = await pool.query(
+      `SELECT email
+       FROM "user"
+       WHERE COALESCE((roles->>$1)::int, -2) = $2`,
+      [role, status],
     );
-
-    snapshot.forEach((doc) => {
-      output.push(doc.data().email);
+    rows.forEach((row) => {
+      output.push(row.email);
     });
 
     return res.json({ items: output.join(",") }, { status: 200 });

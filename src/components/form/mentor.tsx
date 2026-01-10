@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "@/components/form/form";
 import { FIELDS, ATTRIBUTES } from "@/data/form/mentors";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/utils/auth/auth-client";
 import { STATUSES } from "@/data/statuses";
 import { schema } from "@/schemas/mentor";
 import { submit } from "@/utils/form";
@@ -11,6 +11,7 @@ import { submit } from "@/utils/form";
 const Mentor = () => {
   const { data: session } = useSession();
 
+  const [isLoaded, setIsLoaded] = useState(false);
   const [mentor, setMentor] = useState({
     ...ATTRIBUTES,
     firstName: session?.user.firstName || "",
@@ -20,7 +21,21 @@ const Mentor = () => {
     form: "mentors",
   });
 
-  if (!session?.user) return null;
+  useEffect(() => {
+    if (!session?.user) return;
+    setMentor((prev) => ({
+      ...prev,
+      firstName: prev.firstName || session.user.firstName || "",
+      lastName: prev.lastName || session.user.lastName || "",
+      email: prev.email || session.user.email || "",
+      roles: Object.keys(prev.roles || {}).length
+        ? prev.roles
+        : session.user.roles || {},
+    }));
+    setIsLoaded(true);
+  }, [session?.user]);
+
+  if (!isLoaded || !session?.user) return null;
 
   const onSubmit = async (
     setLoading: (value: boolean) => void,

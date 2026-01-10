@@ -1,24 +1,7 @@
 import { NextResponse } from "next/server";
-import { db } from "@/utils/firebase";
-import {
-  doc,
-  collection,
-  getDocs,
-  query,
-  where,
-  deleteField,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  orderBy,
-  limit,
-  endBefore,
-  limitToLast,
-  startAfter,
-  getCountFromServer,
-} from "firebase/firestore";
 import { authenticate } from "@/utils/auth";
 import { AUTH } from "@/data/admin/dashboard";
+import { ensureAppTables, pool } from "@/utils/db";
 
 export const GET = async (req) => {
   const direction = req.nextUrl.searchParams.get("direction");
@@ -39,50 +22,63 @@ export const GET = async (req) => {
 
   const output = [];
   try {
-    let snapshot;
+    await ensureAppTables();
+    const sizeValue = parseInt(size || "0", 10) || 50;
+    let rows = [];
 
     if (direction === "next" && last !== "undefined") {
-      const lastDocument = await getDoc(doc(db, "teams", last));
-
-      snapshot = await getDocs(
-        query(
-          collection(db, "teams"),
-          orderBy(`status`),
-          where(`status`, "in", [-1, 0, 1]),
-          startAfter(lastDocument),
-          limit(size),
-        ),
+      const lastResult = await pool.query(
+        "SELECT status FROM teams WHERE id = $1",
+        [last],
       );
+      const lastStatus = lastResult.rows[0]?.status;
+      const result = await pool.query(
+        `SELECT id, links, status, members, timestamp, name
+         FROM teams
+         WHERE status IN (-1, 0, 1)
+           AND (status, id) > ($1, $2)
+         ORDER BY status, id
+         LIMIT $3`,
+        [lastStatus, last, sizeValue],
+      );
+      rows = result.rows;
     } else if (direction === "prev" && first !== "undefined") {
-      const firstDocument = await getDoc(doc(db, "teams", first));
-
-      snapshot = await getDocs(
-        query(
-          collection(db, "teams"),
-          orderBy(`status`),
-          where(`status`, "in", [-1, 0, 1]),
-          endBefore(firstDocument),
-          limitToLast(size),
-        ),
+      const firstResult = await pool.query(
+        "SELECT status FROM teams WHERE id = $1",
+        [first],
       );
+      const firstStatus = firstResult.rows[0]?.status;
+      const result = await pool.query(
+        `SELECT id, links, status, members, timestamp, name
+         FROM teams
+         WHERE status IN (-1, 0, 1)
+           AND (status, id) < ($1, $2)
+         ORDER BY status DESC, id DESC
+         LIMIT $3`,
+        [firstStatus, first, sizeValue],
+      );
+      rows = result.rows.reverse();
     } else {
-      snapshot = await getDocs(
-        query(
-          collection(db, "teams"),
-          orderBy(`status`),
-          where(`status`, "in", [-1, 0, 1]),
-          limit(size),
-        ),
+      const result = await pool.query(
+        `SELECT id, links, status, members, timestamp, name
+         FROM teams
+         WHERE status IN (-1, 0, 1)
+         ORDER BY status, id
+         LIMIT $1`,
+        [sizeValue],
       );
+      rows = result.rows;
     }
 
-    snapshot.forEach((doc) => {
-      const { links, status, members, timestamp, name } = doc.data();
+    rows.forEach((row) => {
+      const { links, status, members, timestamp, name } = row;
+      const safeMembers = members || [];
+      const safeLinks = links || {};
 
-      const formattedNames = members.map((member) => member.name);
-      const formattedDiscords = members.map((member) => member.discord);
-      const formattedUids = members.map((member) => member.uid);
-      const formattedLinks = Object.entries(links)
+      const formattedNames = safeMembers.map((member) => member.name);
+      const formattedDiscords = safeMembers.map((member) => member.discord);
+      const formattedUids = safeMembers.map((member) => member.uid);
+      const formattedLinks = Object.entries(safeLinks)
         .filter(([_, value]) => value !== "")
         .map(([key, value]) => {
           return { name: key, link: value };
@@ -90,24 +86,24 @@ export const GET = async (req) => {
 
       output.push({
         name: name,
-        teamid: doc.id,
+        teamid: row.id,
         links: formattedLinks,
         members: formattedNames,
         discords: formattedDiscords,
         uids: formattedUids,
         status,
-        uid: doc.id,
+        uid: row.id,
         selected: false,
         hidden: false,
         timestamp: timestamp || new Date(),
       });
     });
 
-    const countFromServer = await getCountFromServer(
-      query(collection(db, "teams"), where(`status`, "in", [-1, 0, 1])),
+    const countResult = await pool.query(
+      "SELECT COUNT(*)::int AS count FROM teams WHERE status IN (-1, 0, 1)",
     );
 
-    const total = countFromServer.data().count;
+    const total = countResult.rows[0]?.count || 0;
     const lastDoc = output.length > 0 ? output[output.length - 1].uid : "";
     const firstDoc = output.length > 0 ? output[0].uid : "";
 
@@ -142,10 +138,12 @@ export const PUT = async (req) => {
     );
   }
   try {
+    await ensureAppTables();
     objects.map(async (object) => {
-      await updateDoc(doc(db, "teams", object.uid), {
-        status: status,
-      });
+      await pool.query("UPDATE teams SET status = $1 WHERE id = $2", [
+        status,
+        object.uid,
+      ]);
     });
     return res.json({ message: "OK" }, { status: 200 });
   } catch (err) {
@@ -168,16 +166,20 @@ export const DELETE = async (req) => {
     );
   }
   try {
+    await ensureAppTables();
     objects.map(async (object) => {
-      const members = await getDocs(
-        query(collection(db, "users"), where("team", "==", object)),
+      const members = await pool.query(
+        `SELECT id FROM "user" WHERE "team" = $1`,
+        [object],
       );
-      members.docs.forEach(async (member) => {
-        await updateDoc(doc(db, "users", member.id), {
-          team: deleteField(),
-        });
-      });
-      await deleteDoc(doc(db, "teams", object));
+      await Promise.all(
+        members.rows.map((member) =>
+          pool.query(`UPDATE "user" SET "team" = NULL WHERE id = $1`, [
+            member.id,
+          ]),
+        ),
+      );
+      await pool.query("DELETE FROM teams WHERE id = $1", [object]);
     });
     return res.json({ message: "OK" }, { status: 200 });
   } catch (err) {

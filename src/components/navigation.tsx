@@ -7,7 +7,7 @@ import { TABS } from "@/data/navigation";
 import { usePathname } from "next/navigation";
 import data from "@/data/config";
 import { LogIn, ChevronDown, SquareArrowOutUpRight } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut } from "@/utils/auth/auth-client";
 import {
   Sidebar,
   SidebarContent,
@@ -102,7 +102,7 @@ const Navigation = () => {
           {open && <span className="ml-2">Close Sidebar</span>}
         </span>
         <span
-          onClick={() => signOut({ callbackUrl: "/", redirect: true })}
+          onClick={() => signOut("/")}
           className={`${open ? "h-7 pl-3" : "mx-auto h-6"} flex items-center text-lg hover:cursor-pointer`}
         >
           <span className={`${!open && "mx-auto"}`}>

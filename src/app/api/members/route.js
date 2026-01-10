@@ -1,15 +1,7 @@
 import { NextResponse } from "next/server";
-import { db } from "@/utils/firebase";
-import {
-  doc,
-  getDoc,
-  updateDoc,
-  arrayRemove,
-  arrayUnion,
-  deleteDoc,
-} from "firebase/firestore";
 import { authenticate } from "@/utils/auth";
 import { AUTH } from "@/data/user/members";
+import { ensureAppTables, pool } from "@/utils/db";
 
 export const DELETE = async () => {
   const res = NextResponse;
@@ -22,21 +14,29 @@ export const DELETE = async () => {
     );
   }
 
-  const { members } = (await getDoc(doc(db, "teams", user.team))).data();
+  await ensureAppTables();
+  const { rows } = await pool.query(
+    "SELECT members FROM teams WHERE id = $1",
+    [user.team],
+  );
+  const members = rows[0]?.members || [];
 
   try {
-    if (members.length <= 1) await deleteDoc(doc(db, "teams", user.team));
-    else
-      await updateDoc(doc(db, "teams", user.team), {
-        members: arrayRemove({
-          discord: user.discord,
-          name: `${user.firstName} ${user.lastName}`,
-          uid: user.id,
-        }),
-      });
-    await updateDoc(doc(db, "users", user.id), {
-      team: "",
-    });
+    if (members.length <= 1) {
+      await pool.query("DELETE FROM teams WHERE id = $1", [user.team]);
+    } else {
+      const updatedMembers = members.filter(
+        (member) => member.uid !== user.id,
+      );
+      await pool.query("UPDATE teams SET members = $1::jsonb WHERE id = $2", [
+        JSON.stringify(updatedMembers),
+        user.team,
+      ]);
+    }
+    await pool.query(`UPDATE "user" SET "team" = $1 WHERE id = $2`, [
+      "",
+      user.id,
+    ]);
     return res.json({ message: "OK" }, { status: 200 });
   } catch (err) {
     return res.json(
@@ -60,21 +60,31 @@ export const PUT = async (req) => {
   const { team } = await req.json();
 
   try {
-    const snapshot = await getDoc(doc(db, "teams", team));
-    if (!snapshot.exists())
+    await ensureAppTables();
+    const { rows } = await pool.query(
+      "SELECT members FROM teams WHERE id = $1",
+      [team],
+    );
+    if (!rows.length)
       return res.json({ message: "Invalid Team ID" }, { status: 500 });
-    const { members } = snapshot.data();
+    const { members } = rows[0];
     if (members.length < 4) {
-      await updateDoc(doc(db, "teams", team), {
-        members: arrayUnion({
+      const updatedMembers = [
+        ...members,
+        {
           discord: user.discord,
           name: `${user.firstName} ${user.lastName}`,
           uid: user.id,
-        }),
-      });
-      await updateDoc(doc(db, "users", user.id), {
-        team: team,
-      });
+        },
+      ];
+      await pool.query("UPDATE teams SET members = $1::jsonb WHERE id = $2", [
+        JSON.stringify(updatedMembers),
+        team,
+      ]);
+      await pool.query(`UPDATE "user" SET "team" = $1 WHERE id = $2`, [
+        team,
+        user.id,
+      ]);
       return res.json({ message: "OK" }, { status: 200 });
     } else
       return res.json({ message: "Exceeded 4 People Limit" }, { status: 500 });

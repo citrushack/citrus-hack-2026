@@ -1,6 +1,6 @@
 import Details from "./details";
 import NewTeam from "./new";
-import { getSession } from "@/utils/auth";
+import { getSession } from "@/utils/auth/auth";
 import { fetchTeam } from "../actions/fetchTeam";
 import { Label } from "@/components/ui/label";
 

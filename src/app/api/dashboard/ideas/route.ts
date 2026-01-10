@@ -1,7 +1,7 @@
 import { AUTH } from "@/data/admin/dashboard";
-import { authenticate } from "@/utils/auth";
-import { db } from "@/utils/firebase";
-import { addDoc, collection, getDocs, query } from "firebase/firestore";
+import { authenticate } from "@/utils/auth/auth";
+import { ensureAppTables, pool } from "@/utils/db";
+import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 
 interface idea {
@@ -23,12 +23,18 @@ export const GET = async () => {
   }
 
   try {
+    await ensureAppTables();
     const output: idea[] = [];
-
-    const snapshot = await getDocs(query(collection(db, "ideas")));
-
-    snapshot.forEach((doc) => {
-      output.push(doc.data() as idea);
+    const { rows } = await pool.query(
+      "SELECT title, languages, details, contact FROM ideas ORDER BY created_at DESC",
+    );
+    rows.forEach((row) => {
+      output.push({
+        title: row.title,
+        languages: row.languages || [],
+        details: row.details,
+        contact: row.contact,
+      });
     });
 
     return res.json(
@@ -61,12 +67,12 @@ export const POST = async (req: Request) => {
   const { idea, languages, details, contact } = await req.json();
 
   try {
-    await addDoc(collection(db, "ideas"), {
-      title: idea,
-      languages,
-      details,
-      contact,
-    });
+    await ensureAppTables();
+    await pool.query(
+      `INSERT INTO ideas (id, title, languages, details, contact)
+       VALUES ($1, $2, $3::jsonb, $4, $5)`,
+      [randomUUID(), idea, JSON.stringify(languages), details, contact],
+    );
     return res.json({ message: "OK" }, { status: 200 });
   } catch (err) {
     return res.json(

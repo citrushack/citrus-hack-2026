@@ -1,17 +1,7 @@
 import { NextResponse } from "next/server";
-import { db } from "@/utils/firebase";
-import {
-  collection,
-  doc,
-  getDocs,
-  updateDoc,
-  query,
-  where,
-  deleteField,
-  or,
-} from "firebase/firestore";
 import { authenticate } from "@/utils/auth";
 import { AUTH } from "@/data/admin/dashboard";
+import { ensureAppTables, pool } from "@/utils/db";
 
 export const GET = async () => {
   const res = NextResponse;
@@ -28,29 +18,26 @@ export const GET = async () => {
   const judges = [];
 
   try {
-    const teamsPromise = getDocs(
-      query(
-        collection(db, "teams"),
-        or(where("status", "==", 1), where("status", "==", 0)),
+    await ensureAppTables();
+    const [teamsResult, judgesResult] = await Promise.all([
+      pool.query(
+        "SELECT id, links, name, rounds, table_label FROM teams WHERE status IN (0, 1)",
       ),
-    );
-
-    const judgesPromise = getDocs(
-      query(collection(db, "users"), where("roles.judges", "==", 1)),
-    );
-
-    const [teamsSnapshot, judgesSnapshot] = await Promise.all([
-      teamsPromise,
-      judgesPromise,
+      pool.query(
+        `SELECT id, "affiliation", "firstName", "lastName"
+         FROM "user"
+         WHERE COALESCE((roles->>'judges')::int, -2) = 1`,
+      ),
     ]);
 
-    teamsSnapshot.forEach((doc) => {
-      const { links, name, rounds, table } = doc.data();
+    teamsResult.rows.forEach((row) => {
+      const { links, name, rounds, table_label } = row;
+      const safeLinks = links || {};
 
-      if (links.devpost !== "") {
-        const formattedRounds = rounds === undefined ? [] : JSON.parse(rounds);
-        const formattedTable = table === undefined ? "" : table;
-        const formattedLinks = Object.entries(links).map(([key, value]) => {
+      if ((safeLinks.devpost || "") !== "") {
+        const formattedRounds = rounds || [];
+        const formattedTable = table_label || "";
+        const formattedLinks = Object.entries(safeLinks).map(([key, value]) => {
           return { name: key, link: value };
         });
 
@@ -59,20 +46,20 @@ export const GET = async () => {
           rounds: formattedRounds,
           table: formattedTable,
           name,
-          uid: doc.id,
+          uid: row.id,
           hidden: false,
         });
       }
     });
 
-    judgesSnapshot.forEach((doc) => {
-      const { affiliation, firstName, lastName } = doc.data();
+    judgesResult.rows.forEach((row) => {
+      const { affiliation, firstName, lastName } = row;
 
       const name = firstName + " " + lastName;
       judges.push({
         affiliation,
         name,
-        uid: doc.id,
+        uid: row.id,
       });
     });
 
@@ -102,12 +89,13 @@ export const DELETE = async (req) => {
   const ids = req.nextUrl.searchParams.get("ids").split(",");
 
   try {
+    await ensureAppTables();
     await Promise.all(
       ids.map(async (id) => {
-        await updateDoc(doc(db, "teams", id), {
-          table: deleteField(),
-          rounds: deleteField(),
-        });
+        await pool.query(
+          "UPDATE teams SET table_label = NULL, rounds = NULL WHERE id = $1",
+          [id],
+        );
       }),
     );
 
@@ -134,22 +122,22 @@ export const PUT = async (req) => {
   const { teams, judges } = await req.json();
 
   try {
+    await ensureAppTables();
     await Promise.all(
       teams.map(async (object) => {
-        const rounds = JSON.stringify(object.rounds);
-        await updateDoc(doc(db, "teams", object.uid), {
-          table: object.table,
-          rounds: rounds,
-        });
+        await pool.query(
+          "UPDATE teams SET table_label = $1, rounds = $2::jsonb WHERE id = $3",
+          [object.table, JSON.stringify(object.rounds), object.uid],
+        );
       }),
     );
 
     await Promise.all(
       judges.map(async (object) => {
-        const rounds = JSON.stringify(object.rounds);
-        await updateDoc(doc(db, "users", object.uid), {
-          rounds: rounds,
-        });
+        await pool.query(
+          `UPDATE "user" SET "rounds" = $1::jsonb WHERE id = $2`,
+          [JSON.stringify(object.rounds), object.uid],
+        );
       }),
     );
 

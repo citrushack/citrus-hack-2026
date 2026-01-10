@@ -1,27 +1,9 @@
 import { NextResponse } from "next/server";
-import { db } from "@/utils/firebase";
-import {
-  doc,
-  updateDoc,
-  setDoc,
-  collection,
-  getDocs,
-  getDoc,
-  query,
-  where,
-  deleteField,
-  Timestamp,
-  increment,
-  limit,
-  startAfter,
-  getCountFromServer,
-  orderBy,
-  deleteDoc,
-} from "firebase/firestore";
-import { authenticate } from "@/utils/auth";
+import { authenticate } from "@/utils/auth/auth";
 import { AUTH, ATTRIBUTES } from "@/data/admin/dashboard";
 import send from "@/utils/email";
 import data from "@/data/config";
+import { ensureAppTables, pool } from "@/utils/db";
 
 const types = new Set([
   "admins",
@@ -36,6 +18,30 @@ const types = new Set([
   "leads",
 ]);
 
+const updateStatistic = async (statKey, type, status, value, delta) => {
+  if (!value) return;
+  const statusKey = String(status);
+  const { rows } = await pool.query(
+    "SELECT data FROM statistics WHERE key = $1",
+    [statKey],
+  );
+  const data = rows[0]?.data || {};
+  if (!data[type]) {
+    data[type] = { "-1": {}, "0": {}, "1": {} };
+  }
+  if (!data[type][statusKey]) {
+    data[type][statusKey] = {};
+  }
+  const current = data[type][statusKey][value] || 0;
+  data[type][statusKey][value] = current + delta;
+  await pool.query(
+    `INSERT INTO statistics (key, data)
+     VALUES ($1, $2::jsonb)
+     ON CONFLICT (key) DO UPDATE SET data = EXCLUDED.data`,
+    [statKey, JSON.stringify(data)],
+  );
+};
+
 export const POST = async (req, { params }) => {
   const res = NextResponse;
   const { auth, message, user } = await authenticate(AUTH.POST);
@@ -49,44 +55,70 @@ export const POST = async (req, { params }) => {
   const body = await req.json();
   try {
     if (types.has(params.type)) {
+      await ensureAppTables();
       const element = {};
       ATTRIBUTES[params.type].forEach((attribute) => {
         element[attribute] = body[attribute];
       });
 
-      updateDoc(doc(db, "users", user.id), {
-        ...element,
-        timestamp: Timestamp.now(),
-        [`roles.${params.type}`]: 0,
-      });
+      const fields = Object.keys(element);
+      const values = Object.values(element);
+      const assignments = fields.map(
+        (field, index) => `"${field}" = $${index + 1}`,
+      );
+      const timestampIndex = values.length + 1;
+      const userIdIndex = values.length + 2;
+
+      await pool.query(
+        `UPDATE "user"
+         SET ${assignments.join(", ")},
+             "timestamp" = $${timestampIndex}
+         WHERE id = $${userIdIndex}`,
+        [...values, new Date(), user.id],
+      );
+
+      await pool.query(
+        `UPDATE "user"
+         SET "roles" = jsonb_set(
+           COALESCE("roles", '{}'::jsonb),
+           $1::text[],
+           to_jsonb($2::int),
+           true
+         )
+         WHERE id = $3`,
+        [`{${params.type}}`, 0, user.id],
+      );
 
       if (params.type === "participants" && body["resume"]) {
-        setDoc(doc(db, "resumes", user.id), {
-          firstName: body["firstName"],
-          lastName: body["lastName"],
-          email: body["email"],
-          school: body["school"],
-          grade: body["grade"],
-          resume: body["resume"],
-          status: 0,
-        });
+        await pool.query(
+          `INSERT INTO resumes
+           (id, first_name, last_name, email, school, grade, resume, status)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, 0)
+           ON CONFLICT (id)
+           DO UPDATE SET
+             first_name = EXCLUDED.first_name,
+             last_name = EXCLUDED.last_name,
+             email = EXCLUDED.email,
+             school = EXCLUDED.school,
+             grade = EXCLUDED.grade,
+             resume = EXCLUDED.resume,
+             status = EXCLUDED.status`,
+          [
+            user.id,
+            body["firstName"],
+            body["lastName"],
+            body["email"],
+            body["school"],
+            body["grade"],
+            body["resume"],
+          ],
+        );
       }
 
-      updateDoc(doc(db, "statistics", "shirt"), {
-        [`${params.type}.0.${element.shirt}`]: increment(1),
-      });
-
-      updateDoc(doc(db, "statistics", "diet"), {
-        [`${params.type}.0.${element.diet}`]: increment(1),
-      });
-
-      updateDoc(doc(db, "statistics", "gender"), {
-        [`${params.type}.0.${element.gender}`]: increment(1),
-      });
-
-      updateDoc(doc(db, "statistics", "age"), {
-        [`${params.type}.0.${element.age}`]: increment(1),
-      });
+      await updateStatistic("shirt", params.type, 0, element.shirt, 1);
+      await updateStatistic("diet", params.type, 0, element.diet, 1);
+      await updateStatistic("gender", params.type, 0, element.gender, 1);
+      await updateStatistic("age", params.type, 0, element.age, 1);
 
       send({
         email: user.email,
@@ -124,55 +156,66 @@ export const GET = async (req, { params }) => {
   const output = [];
 
   try {
-    let snapshot;
     if (types.has(params.type)) {
-      if (last !== "undefined") {
-        const lastDocument = await getDoc(doc(db, "users", last));
+      await ensureAppTables();
+      const sizeValue = parseInt(size || "0", 10) || 50;
+      const attributes = ATTRIBUTES[params.type];
+      const selectFields = attributes.map((field) => `"${field}"`).join(", ");
+      let rows = [];
 
-        snapshot = await getDocs(
-          query(
-            collection(db, "users"),
-            orderBy(`roles.${params.type}`),
-            where(`roles.${params.type}`, "in", [-1, 0, 1]),
-            startAfter(lastDocument),
-            limit(size),
-          ),
+      if (last !== "undefined") {
+        const lastResult = await pool.query(
+          `SELECT COALESCE(("roles"->>$1)::int, 999) AS status
+           FROM "user"
+           WHERE id = $2`,
+          [params.type, last],
         );
+        const lastStatus = lastResult.rows[0]?.status ?? 999;
+        const result = await pool.query(
+          `SELECT id, "timestamp", "roles", ${selectFields}
+           FROM "user"
+           WHERE COALESCE(("roles"->>$1)::int, 999) IN (-1, 0, 1)
+             AND (COALESCE(("roles"->>$1)::int, 999), id) > ($2, $3)
+           ORDER BY COALESCE(("roles"->>$1)::int, 999), id
+           LIMIT $4`,
+          [params.type, lastStatus, last, sizeValue],
+        );
+        rows = result.rows;
       } else {
-        snapshot = await getDocs(
-          query(
-            collection(db, "users"),
-            orderBy(`roles.${params.type}`),
-            where(`roles.${params.type}`, "in", [-1, 0, 1]),
-            limit(size),
-          ),
+        const result = await pool.query(
+          `SELECT id, "timestamp", "roles", ${selectFields}
+           FROM "user"
+           WHERE COALESCE(("roles"->>$1)::int, 999) IN (-1, 0, 1)
+           ORDER BY COALESCE(("roles"->>$1)::int, 999), id
+           LIMIT $2`,
+          [params.type, sizeValue],
         );
+        rows = result.rows;
       }
 
-      snapshot.forEach((doc) => {
-        const data = doc.data();
+      rows.forEach((row) => {
         const element = {};
         ATTRIBUTES[params.type].forEach((attribute) => {
-          element[attribute] = data[attribute];
+          element[attribute] = row[attribute];
         });
         output.push({
           ...element,
-          uid: doc.id,
-          timestamp: data.timestamp,
-          status: data.roles[params.type],
+          uid: row.id,
+          timestamp: row.timestamp,
+          status: row.roles?.[params.type],
           selected: false,
           hidden: false,
         });
       });
 
-      const countFromServer = await getCountFromServer(
-        query(
-          collection(db, "users"),
-          where(`roles.${params.type}`, "in", [-1, 0, 1]),
-        ),
+      const countResult = await pool.query(
+        `SELECT COUNT(*)::int AS count
+         FROM "user"
+         WHERE COALESCE(("roles"->>$1)::int, 999) IN (-1, 0, 1)`,
+        [params.type],
       );
 
-      const total = countFromServer.data().count;
+      const total = countResult.rows[0]?.count || 0;
       const lastDoc = output.length > 0 ? output[output.length - 1].uid : "";
 
       return res.json(
@@ -206,10 +249,19 @@ export const PUT = async (req, { params }) => {
   }
   try {
     if (types.has(params.type)) {
+      await ensureAppTables();
       objects.map(async (object) => {
-        await updateDoc(doc(db, "users", object.uid), {
-          [`roles.${params.type}`]: status,
-        });
+        await pool.query(
+          `UPDATE "user"
+           SET "roles" = jsonb_set(
+             COALESCE("roles", '{}'::jsonb),
+             $1::text[],
+             to_jsonb($2::int),
+             true
+           )
+           WHERE id = $3`,
+          [`{${params.type}}`, status, object.uid],
+        );
 
         const id = status === 1 ? "acceptance" : "rejection";
 
@@ -233,25 +285,53 @@ export const PUT = async (req, { params }) => {
         });
 
         try {
-          updateDoc(doc(db, "statistics", "shirt"), {
-            [`${params.type}.${status}.${object.shirt}`]: increment(1),
-            [`${params.type}.0.${object.shirt}`]: increment(-1),
-          });
+          await updateStatistic(
+            "shirt",
+            params.type,
+            status,
+            object.shirt,
+            1,
+          );
+          await updateStatistic(
+            "shirt",
+            params.type,
+            0,
+            object.shirt,
+            -1,
+          );
 
-          updateDoc(doc(db, "statistics", "diet"), {
-            [`${params.type}.${status}.${object.diet}`]: increment(1),
-            [`${params.type}.0.${object.diet}`]: increment(-1),
-          });
+          await updateStatistic(
+            "diet",
+            params.type,
+            status,
+            object.diet,
+            1,
+          );
+          await updateStatistic("diet", params.type, 0, object.diet, -1);
 
-          updateDoc(doc(db, "statistics", "gender"), {
-            [`${params.type}.${status}.${object.gender}`]: increment(1),
-            [`${params.type}.0.${object.gender}`]: increment(-1),
-          });
+          await updateStatistic(
+            "gender",
+            params.type,
+            status,
+            object.gender,
+            1,
+          );
+          await updateStatistic(
+            "gender",
+            params.type,
+            0,
+            object.gender,
+            -1,
+          );
 
-          updateDoc(doc(db, "statistics", "age"), {
-            [`${params.type}.${status}.${object.age}`]: increment(1),
-            [`${params.type}.0.${object.age}`]: increment(-1),
-          });
+          await updateStatistic(
+            "age",
+            params.type,
+            status,
+            object.age,
+            1,
+          );
+          await updateStatistic("age", params.type, 0, object.age, -1);
         } catch (error) {
           console.error(error);
         }
@@ -279,31 +359,27 @@ export const DELETE = async (req, { params }) => {
   }
   try {
     if (types.has(params.type)) {
+      await ensureAppTables();
       await Promise.all(
         objects.map(async ({ uid, shirt, diet, gender, age }) => {
-          const snapshot = await getDoc(doc(db, "users", uid));
-          const status = snapshot.data().roles[params.type];
-          await updateDoc(doc(db, "users", uid), {
-            [`roles.${params.type}`]: deleteField(),
-          });
+          const snapshot = await pool.query(
+            `SELECT "roles" FROM "user" WHERE id = $1`,
+            [uid],
+          );
+          const status = snapshot.rows[0]?.roles?.[params.type];
+          await pool.query(
+            `UPDATE "user"
+             SET "roles" = COALESCE("roles", '{}'::jsonb) - $1
+             WHERE id = $2`,
+            [params.type, uid],
+          );
           if (params.type === "participants") {
-            await deleteDoc(doc(db, "resumes", uid));
+            await pool.query("DELETE FROM resumes WHERE id = $1", [uid]);
           }
-          updateDoc(doc(db, "statistics", "shirt"), {
-            [`${params.type}.${status}.${shirt}`]: increment(-1),
-          });
-
-          updateDoc(doc(db, "statistics", "diet"), {
-            [`${params.type}.${status}.${diet}`]: increment(-1),
-          });
-
-          updateDoc(doc(db, "statistics", "gender"), {
-            [`${params.type}.${status}.${gender}`]: increment(-1),
-          });
-
-          updateDoc(doc(db, "statistics", "age"), {
-            [`${params.type}.${status}.${age}`]: increment(-1),
-          });
+          await updateStatistic("shirt", params.type, status, shirt, -1);
+          await updateStatistic("diet", params.type, status, diet, -1);
+          await updateStatistic("gender", params.type, status, gender, -1);
+          await updateStatistic("age", params.type, status, age, -1);
         }),
       );
     }
