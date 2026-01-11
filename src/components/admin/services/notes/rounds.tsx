@@ -57,7 +57,7 @@ const Rounds = ({ team }: props) => {
               <AccordionItem
                 value={`empty-${index}`}
                 key={index}
-                className="w-full bg-hackathon-gray-200 px-6 py-4"
+                className="bg-hackathon-gray-200 w-full px-6 py-4"
               >
                 R{index + 1} - No Judge
               </AccordionItem>
@@ -73,7 +73,7 @@ const Rounds = ({ team }: props) => {
               </AccordionTrigger>
               <AccordionContent className="flex flex-col bg-white p-6 text-black">
                 <div className="flex flex-col gap-6">
-                  <div className="flex flex-col text-2xl text-hackathon-blue-100">
+                  <div className="text-hackathon-blue-100 flex flex-col text-2xl">
                     <div className="font-bold">TRACKS</div>
                     <div className="flex flex-row gap-2">
                       {feedback ? (
@@ -108,7 +108,7 @@ const Rounds = ({ team }: props) => {
                     return (
                       <div key={index}>
                         <div className="flex flex-row justify-between text-2xl">
-                          <div className="flex items-center gap-2 text-hackathon-blue-100">
+                          <div className="text-hackathon-blue-100 flex items-center gap-2">
                             <div className="font-bold">
                               {title.toUpperCase()}
                             </div>

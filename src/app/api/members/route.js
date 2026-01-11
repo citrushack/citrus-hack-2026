@@ -15,19 +15,16 @@ export const DELETE = async () => {
   }
 
   await ensureAppTables();
-  const { rows } = await pool.query(
-    "SELECT members FROM teams WHERE id = $1",
-    [user.team],
-  );
+  const { rows } = await pool.query("SELECT members FROM teams WHERE id = $1", [
+    user.team,
+  ]);
   const members = rows[0]?.members || [];
 
   try {
     if (members.length <= 1) {
       await pool.query("DELETE FROM teams WHERE id = $1", [user.team]);
     } else {
-      const updatedMembers = members.filter(
-        (member) => member.uid !== user.id,
-      );
+      const updatedMembers = members.filter((member) => member.uid !== user.id);
       await pool.query("UPDATE teams SET members = $1::jsonb WHERE id = $2", [
         JSON.stringify(updatedMembers),
         user.team,

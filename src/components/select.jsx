@@ -105,7 +105,7 @@ const Select = ({
             {selected ? (
               selected
             ) : (
-              <p className="font-normal text-hackathon-gray-200">
+              <p className="text-hackathon-gray-200 font-normal">
                 {placeholder}
               </p>
             )}

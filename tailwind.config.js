@@ -2,10 +2,9 @@
 module.exports = {
   darkMode: ["class"],
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
-  prefix: "",
   theme: {
     container: {
-      center: "true",
+      center: true,
       padding: "2rem",
       screens: {
         "2xl": "1400px",
@@ -13,111 +12,40 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        poppins: ["var(--font-poppins)"],
+        "allerta-stencil": ["var(--font-allerta-stencil)", "sans-serif"],
+        "indie-flower": ["var(--font-indie-flower)", "cursive"],
       },
       colors: {
-        hackathon: {
-          primary: "#22577A",
-          "blue-100": "#38A3A5",
-          "green-100": "#E7F7E9",
-          "green-300": "#57CC99",
-          "gray-100": "#E7E7E7",
-          "gray-200": "#9ea4af",
-          "gray-300": "#525252",
-          page: "#F5F5F5",
-          status: {
-            pending: "#FFCF55",
-            accepted: "#80ED99",
-            rejected: "#F07167",
-          },
-          table: {
-            pending: "#FFF0BB",
-            accepted: "#CFEDE9",
-            rejected: "#FFE8E2",
-            selected: "#E7F7E9",
-          },
-          calendar: {
-            today: "#E7F7E9",
-          },
-          timer: {
-            add: "#0E1729",
-            clear: "#EF4444",
-          },
-          tags: {
-            "red-bg": "#FFE9E2",
-            "red-text": "#F07167",
-            "yellow-bg": "#FFF0BC",
-            "yellow-text": "#FFB81C",
-            "green-bg": "#CFEDEA",
-            "green-text": "#00AFB9",
-            "gray-bg": "#E9E9E9",
-            "gray-text": "#969696",
-            "purple-bg": "#E6DFF6",
-            "purple-text": "#825ED0",
-            "grayblue-bg": "#D3DDE4",
-            "grayblue-text": "#22577A",
-            "teal-bg": "#D7EDED",
-            "teal-text": "#38A3A5",
-            "lightgreen-bg": "#DDF5EB",
-            "lightgreen-text": "#57CC99",
-            "pink-bg": "#FFE3FB",
-            "pink-text": "#F583F1",
-            white: "#fff",
-          },
-        },
-        sidebar: {
-          DEFAULT: "#22577A",
-          foreground: "#F5F5F5",
-          primary: "#38A3A5",
-          "primary-foreground": "#F5F5F5",
-          accent: "#FFCF55",
-          "accent-foreground": "#22577A",
-          border: "#E7E7E7",
-          ring: "#FFCF55",
-          "primary-foreground": "#F5F5F5",
-          "accent-foreground": "#22577A",
+        citrushack: {
+          cream: "#FFFAF6",
+          darkBlue: "#2D3142",
+          lightGray: "#BFC0C0",
+          orange: "#EF8354",
+          blueGray: "#4F5D75",
+          beige: "#F0E0C6",
+          red: "#FF0000",
         },
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "collapsible-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-collapsible-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-collapsible-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
         "collapsible-up": {
-          from: {
-            height: "var(--radix-collapsible-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-collapsible-content-height)" },
+          to: { height: "0" },
         },
         "caret-blink": {
-          "0%,70%,100%": {
-            opacity: "1",
-          },
-          "20%,50%": {
-            opacity: "0",
-          },
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
         },
       },
       animation: {

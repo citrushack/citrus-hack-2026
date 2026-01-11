@@ -27,7 +27,7 @@ const updateStatistic = async (statKey, type, status, value, delta) => {
   );
   const data = rows[0]?.data || {};
   if (!data[type]) {
-    data[type] = { "-1": {}, "0": {}, "1": {} };
+    data[type] = { "-1": {}, 0: {}, 1: {} };
   }
   if (!data[type][statusKey]) {
     data[type][statusKey] = {};
@@ -285,28 +285,10 @@ export const PUT = async (req, { params }) => {
         });
 
         try {
-          await updateStatistic(
-            "shirt",
-            params.type,
-            status,
-            object.shirt,
-            1,
-          );
-          await updateStatistic(
-            "shirt",
-            params.type,
-            0,
-            object.shirt,
-            -1,
-          );
+          await updateStatistic("shirt", params.type, status, object.shirt, 1);
+          await updateStatistic("shirt", params.type, 0, object.shirt, -1);
 
-          await updateStatistic(
-            "diet",
-            params.type,
-            status,
-            object.diet,
-            1,
-          );
+          await updateStatistic("diet", params.type, status, object.diet, 1);
           await updateStatistic("diet", params.type, 0, object.diet, -1);
 
           await updateStatistic(
@@ -316,21 +298,9 @@ export const PUT = async (req, { params }) => {
             object.gender,
             1,
           );
-          await updateStatistic(
-            "gender",
-            params.type,
-            0,
-            object.gender,
-            -1,
-          );
+          await updateStatistic("gender", params.type, 0, object.gender, -1);
 
-          await updateStatistic(
-            "age",
-            params.type,
-            status,
-            object.age,
-            1,
-          );
+          await updateStatistic("age", params.type, status, object.age, 1);
           await updateStatistic("age", params.type, 0, object.age, -1);
         } catch (error) {
           console.error(error);

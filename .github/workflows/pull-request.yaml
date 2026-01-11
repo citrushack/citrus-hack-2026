@@ -1,4 +1,4 @@
-name: Hackathon Website
+name: Citrus Hack Website
 
 on:
   pull_request:

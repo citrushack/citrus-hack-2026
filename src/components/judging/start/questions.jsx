@@ -66,7 +66,7 @@ const Questions = ({
               <div className="pb-1">
                 <Label
                   htmlFor={field.name}
-                  className="text-xl font-semibold text-hackathon-green-300"
+                  className="text-hackathon-green-300 text-xl font-semibold"
                 >
                   {field.title}
                 </Label>

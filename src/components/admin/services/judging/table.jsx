@@ -54,14 +54,14 @@ const Table = ({ data }) => {
                               key={index}
                               href={link.link}
                               target="_blank"
-                              className="m-0 p-0 text-xl text-black no-underline hover:!text-hackathon-blue-100"
+                              className="hover:!text-hackathon-blue-100 m-0 p-0 text-xl text-black no-underline"
                             >
                               {ICONS[link.name]}
                             </Link>
                           ))}
                     </div>
                     {group.table && (
-                      <p className="mb-0 whitespace-nowrap font-semibold text-hackathon-green-300">
+                      <p className="text-hackathon-green-300 mb-0 whitespace-nowrap font-semibold">
                         table {group.table}
                       </p>
                     )}

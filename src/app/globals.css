@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  /* Colors */
+  --color-citrushack-cream: #fffaf6;
+  --color-citrushack-dark-blue: #2d3142;
+  --color-citrushack-light-gray: #bfc0c0;
+  --color-citrushack-orange: #ef8354;
+  --color-citrushack-blue-gray: #4f5d75;
+  --color-citrushack-beige: #f0e0c6;
+  --color-citrushack-red: #ff0000;
+}
