@@ -16,19 +16,20 @@ type config = {
 };
 
 const data: config = {
-  name: "HACKATHON",
-  short_name: "Hackathon Site",
-  email: "contact.acmucr@gmail.com",
-  description: "DESCRIPTION",
+  name: "CitrusHack 2026",
+  short_name: "CitrusHack 2026",
+  email: "citrushack@gmail.com",
+  description:
+    "Citrus Hack is the Association for Computing Machinery’s (ACM) 24 hour hackathon and one of the Inland Empire’s largest hackathons. Hackers can build projects to present to a panel of judges to compete for tracks and prizes! Throughout April 18-19, there will be free food, free swag, workshops, activities, and more.",
   length: 24,
-  date: new Date("2024-04-12T13:20:00"),
-  end: new Date("2024-04-12T13:20:00"),
+  date: new Date("2026-04-18T13:20:00"),
+  end: new Date("2026-04-19T13:20:00"),
   packet: "",
   devpost: "https://devpost.com/",
-  domain: "https://www.placeholder.com",
-  instagram: "https://www.instagram.com",
-  linkedin: "https://www.linkedin.com",
-  discord: "https://www.discord.com",
+  domain: "https://www.citrushack.com",
+  instagram: "https://www.instagram.com/citrushack_ucr/",
+  linkedin: "https://www.linkedin.com/company/citrushack/",
+  discord: "https://discord.gg/hKp8qzsX",
   heart: "🤎",
 };
 
