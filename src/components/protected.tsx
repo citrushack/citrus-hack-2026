@@ -35,7 +35,7 @@ const ProtectedPage = async ({ children, restrictions, session }: props) => {
 
   const authorized = Object.entries(restrictions).some(([key, values]) =>
     Array.isArray(values)
-      ? values.includes(roles?.[key])
+      ? values.includes(roles?.[key] ?? -1)
       : roles?.[key] === values,
   );
 
