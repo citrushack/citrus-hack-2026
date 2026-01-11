@@ -21,8 +21,7 @@ const Input = React.forwardRef<
 });
 Input.displayName = "Input";
 
-export interface InputWithClearProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputWithClearProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onClear: () => void;
 }
 
