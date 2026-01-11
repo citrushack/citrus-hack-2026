@@ -6,7 +6,7 @@ export async function fetchTeam(id: string) {
 
   await ensureAppTables();
   const { rows } = await pool.query(
-    "SELECT id, name, links, members, status, rounds, table_label FROM teams WHERE id = $1",
+    "SELECT id, name, links, members, status, rounds, table_label, discords FROM teams WHERE id = $1",
     [id],
   );
   if (!rows.length) return null;
@@ -20,5 +20,6 @@ export async function fetchTeam(id: string) {
     status: team.status,
     rounds: team.rounds,
     table: team.table_label || "",
+    discords: team.discords || [],
   } as Team;
 }

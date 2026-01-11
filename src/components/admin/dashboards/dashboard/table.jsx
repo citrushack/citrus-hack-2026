@@ -63,10 +63,9 @@ const Table = ({
     overscan: 5,
   });
 
-  // clean up for deletion of rows
   useEffect(() => {
     rowVirtualizer.measure();
-  }, [rows.length]);
+  }, [rows.length, rowVirtualizer]);
 
   const virtualItems = rowVirtualizer.getVirtualItems();
 
@@ -80,7 +79,7 @@ const Table = ({
             fetchMoreOnBottomReached(e.currentTarget);
           }}
         >
-          <TableHeader className="sticky top-0 z-10 grid rounded-t bg-hackathon-primary text-white">
+          <TableHeader className="bg-hackathon-primary sticky top-0 z-10 grid rounded-t text-white">
             {getHeaderGroups().map(({ headers, id }) => (
               <TableRow key={id} className="flex w-full justify-between">
                 {headers.map(({ id, column, getContext, getSize }) => (
@@ -93,7 +92,7 @@ const Table = ({
                       {flexRender(column.columnDef.header, getContext())}
                       {column.getCanSort() && (
                         <ArrowRightLeft
-                          className={`mx-2 w-4 rotate-90 text-hackathon-gray-200 hover:cursor-pointer hover:opacity-50 ${
+                          className={`text-hackathon-gray-200 mx-2 w-4 rotate-90 hover:cursor-pointer hover:opacity-50 ${
                             column.getIsSorted() && "hidden"
                           }`}
                           onClick={column.getToggleSortingHandler()}
@@ -162,9 +161,8 @@ const Table = ({
                     } = rows[virtualRow.index];
 
                     return (
-                      <>
+                      <div key={id}>
                         <TableRow
-                          key={id}
                           data-index={virtualRow.index}
                           className={`${getIsSelected() && "bg-hackathon-green-100"} flex justify-between`}
                           ref={(node) => rowVirtualizer.measureElement(node)}
@@ -188,13 +186,13 @@ const Table = ({
                         </TableRow>
                         {getIsExpanded() && (
                           <div className="flex w-full flex-col">
-                            <TableRow className="flex w-full justify-between bg-hackathon-gray-100 text-xs">
+                            <TableRow className="bg-hackathon-gray-100 flex w-full justify-between text-xs">
                               {subcolumns?.map(({ header }, index) =>
                                 index === 0 ? (
                                   <TableCell
                                     key={index}
                                     colSpan={getAllCells().length}
-                                    className="w-[20px] bg-hackathon-gray-100 text-xs"
+                                    className="bg-hackathon-gray-100 w-[20px] text-xs"
                                   >
                                     {header}
                                   </TableCell>
@@ -202,7 +200,7 @@ const Table = ({
                                   <TableCell
                                     key={index}
                                     colSpan={getAllCells().length}
-                                    className="w-[150px] bg-hackathon-gray-100 text-xs"
+                                    className="bg-hackathon-gray-100 w-[150px] text-xs"
                                   >
                                     {header}
                                   </TableCell>
@@ -232,7 +230,7 @@ const Table = ({
                             </TableRow>
                           </div>
                         )}
-                      </>
+                      </div>
                     );
                   })}
                 </div>
@@ -243,7 +241,7 @@ const Table = ({
       </div>
       <div className="flex w-full items-center justify-end rounded-b bg-white p-4 text-lg">
         {isFetchingNextPage && (
-          <Loader size={20} className="animate-spin text-hackathon-blue-100" />
+          <Loader size={20} className="text-hackathon-blue-100 animate-spin" />
         )}
         <div className="mx-2">{getRowModel().rows.length} row(s)</div>
       </div>

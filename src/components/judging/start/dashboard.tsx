@@ -73,14 +73,14 @@ const Dashboard = () => {
   return (
     <div className="flex h-full w-full flex-col items-center justify-between bg-[#E7E7E7]">
       <div className="w-full">
-        <Label className="mb-8 flex w-full justify-between rounded-t-xl bg-hackathon-blue-100 px-4 py-4 text-xl font-semibold text-white">
+        <Label className="bg-hackathon-blue-100 mb-8 flex w-full justify-between rounded-t-xl px-4 py-4 text-xl font-semibold text-white">
           <p>JUDGING</p>
           <p>ALL FEEDBACK</p>
         </Label>
         <Accordion
           type="single"
           collapsible
-          className="w-full rounded-xl border-black/20 bg-hackathon-primary text-white"
+          className="bg-hackathon-primary w-full rounded-xl border-black/20 text-white"
         >
           {data.rounds.map((round: Round[], index: number) => {
             const current = round[0];
@@ -89,7 +89,7 @@ const Dashboard = () => {
                 <AccordionItem
                   value={`empty-${index}`}
                   key={index}
-                  className="w-full bg-hackathon-gray-200 p-2"
+                  className="bg-hackathon-gray-200 w-full p-2"
                 >
                   R{index + 1} - No Team
                 </AccordionItem>
@@ -124,7 +124,7 @@ const Dashboard = () => {
                     </Badge>
                     <Link
                       href={`/judge/start/${round[0]?.uid}?name=${name}&round=${index + 1}&table=${table}`}
-                      className="text-md flex flex-row items-center justify-between gap-2 rounded-md bg-hackathon-tags-gray-bg px-2 py-1 text-black"
+                      className="text-md bg-hackathon-tags-gray-bg flex flex-row items-center justify-between gap-2 rounded-md px-2 py-1 text-black"
                     >
                       <Pencil size={20} />
                     </Link>
@@ -134,7 +134,7 @@ const Dashboard = () => {
                   {(["implementation", "idea", "design"] as const).map(
                     (key) => (
                       <div key={key} className="mt-4">
-                        <div className="flex justify-between text-lg font-bold text-hackathon-green-300">
+                        <div className="text-hackathon-green-300 flex justify-between text-lg font-bold">
                           <span>{key.toUpperCase()}</span>
                           <Badge type="purple">
                             {current.feedback?.[key]?.rating ?? 0}/5

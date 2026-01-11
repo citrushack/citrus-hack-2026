@@ -76,7 +76,8 @@ export const authenticate = async (restrictions: Restrictions = {}) => {
     return { message: "Invalid Authentication Credentials.", auth: 401 };
   }
 
-  const roles = (session.user as { roles?: Record<string, number> }).roles || {};
+  const roles =
+    (session.user as { roles?: Record<string, number> }).roles || {};
   const authorized = Object.entries(restrictions).some(([key, value]) =>
     value.includes(+roles[key]),
   );

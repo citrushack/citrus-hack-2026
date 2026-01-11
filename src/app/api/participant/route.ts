@@ -35,18 +35,7 @@ export const POST = async (req: Request) => {
            "shirt" = $8,
            "diet" = $9
        WHERE id = $10`,
-      [
-        phone,
-        major,
-        age,
-        country,
-        school,
-        grade,
-        gender,
-        shirt,
-        diet,
-        user.id,
-      ],
+      [phone, major, age, country, school, grade, gender, shirt, diet, user.id],
     );
     return Response.json({ message: "OK" }, { status: 200 });
   } catch (err) {

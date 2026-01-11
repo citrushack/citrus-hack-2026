@@ -11,12 +11,12 @@ const Team = async () => {
 
   const team = session.user.team;
 
-  const details = await fetchTeam(team);
+  const details = await fetchTeam(team ?? "");
 
   return (
     <div className="flex h-full flex-col items-center gap-3 py-4">
       <Label className="self-start text-2xl font-bold">Team</Label>
-      {team === "" ? <NewTeam /> : <Details team={details} />}
+      {team === "" || !team ? <NewTeam /> : <Details team={details} />}
     </div>
   );
 };

@@ -35,7 +35,7 @@ const ProtectedPage = async ({ children, restrictions, session }: props) => {
 
   const authorized = Object.entries(restrictions).some(([key, values]) =>
     Array.isArray(values)
-      ? values.includes(roles?.[key])
+      ? values.includes(roles?.[key] ?? -1)
       : roles?.[key] === values,
   );
 
@@ -48,7 +48,7 @@ const ProtectedPage = async ({ children, restrictions, session }: props) => {
   return (
     <>
       {navigation && <Navigation />}
-      <div className="relative z-0 flex h-screen w-full items-start overflow-x-hidden bg-hackathon-page md:px-6">
+      <div className="bg-hackathon-page relative z-0 flex h-screen w-full items-start overflow-x-hidden md:px-6">
         <div className="h-full w-full">{children}</div>
       </div>
     </>
