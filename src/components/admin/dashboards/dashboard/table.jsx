@@ -63,10 +63,9 @@ const Table = ({
     overscan: 5,
   });
 
-  // clean up for deletion of rows
   useEffect(() => {
     rowVirtualizer.measure();
-  }, [rows.length]);
+  }, [rows.length, rowVirtualizer]);
 
   const virtualItems = rowVirtualizer.getVirtualItems();
 
@@ -162,9 +161,8 @@ const Table = ({
                     } = rows[virtualRow.index];
 
                     return (
-                      <>
+                      <div key={id}>
                         <TableRow
-                          key={id}
                           data-index={virtualRow.index}
                           className={`${getIsSelected() && "bg-hackathon-green-100"} flex justify-between`}
                           ref={(node) => rowVirtualizer.measureElement(node)}
@@ -232,7 +230,7 @@ const Table = ({
                             </TableRow>
                           </div>
                         )}
-                      </>
+                      </div>
                     );
                   })}
                 </div>
