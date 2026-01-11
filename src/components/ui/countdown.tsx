@@ -39,6 +39,9 @@ interface countdownProps {
     hours?: UnitStyle;
     minutes?: UnitStyle;
     seconds?: UnitStyle;
+    digit?: string;
+    background?: string;
+    unit?: string;
   };
 }
 
@@ -74,7 +77,13 @@ const Countdown = ({ classNames }: countdownProps) => {
   return (
     <div className="flex -translate-y-14 items-center justify-center gap-9 font-bold">
       {Object.entries(countdown).map(([unit, value], index) => {
-        const specificStyle = classNames[unit as keyof typeof classNames] || {};
+        const styleSource = classNames[unit as keyof typeof classNames];
+
+        const specificStyle: UnitStyle =
+          typeof styleSource === "object"
+            ? styleSource
+            : { digit: classNames.digit, background: classNames.background };
+
         return <Digits key={index} value={value} classNames={specificStyle} />;
       })}
     </div>
