@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { AGES, DIETS, GENDERS, SHIRTS } from "@/data/form/information";
 import { ensureAppTables, pool } from "@/utils/db";
 

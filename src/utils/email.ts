@@ -16,6 +16,7 @@ type positions =
   | "sponsors"
   | "panels"
   | "leads";
+
 interface params {
   email: string;
   id: ids;
@@ -33,7 +34,7 @@ const send = async ({
   subject,
   preview,
 }: params): Promise<CreateEmailResponse> => {
-  const { data, error } = await resend.emails.send({
+  return await resend.emails.send({
     from: "Hackathon <info@hackathon.com>",
     to: [email],
     subject: subject,
@@ -41,8 +42,6 @@ const send = async ({
     // eslint-disable-next-line new-cap
     react: Email({ id, name, position, preview }),
   });
-
-  return { data, error };
 };
 
 export default send;
