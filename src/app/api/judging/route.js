@@ -31,12 +31,12 @@ export const GET = async () => {
     ]);
 
     teamsResult.rows.forEach((row) => {
-      const { links, name, rounds, table_label } = row;
+      const { links, name, rounds, table_label: tableLabel } = row;
       const safeLinks = links || {};
 
       if ((safeLinks.devpost || "") !== "") {
         const formattedRounds = rounds || [];
-        const formattedTable = table_label || "";
+        const formattedTable = tableLabel || "";
         const formattedLinks = Object.entries(safeLinks).map(([key, value]) => {
           return { name: key, link: value };
         });
