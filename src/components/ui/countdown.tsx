@@ -2,17 +2,17 @@
 import { useState, useEffect } from "react";
 import data from "@/data/config";
 
-interface digitProps {
-  value: number;
-  unit: string;
-  classNames: {
-    unit: string;
-    digit: string;
-    background: string;
-  };
+interface UnitStyle {
+  digit?: string;
+  background?: string;
 }
 
-const Digits = ({ value, unit, classNames }: digitProps) => {
+interface digitProps {
+  value: number;
+  classNames: UnitStyle;
+}
+
+const Digits = ({ value, classNames }: digitProps) => {
   return (
     <div className="flex flex-col items-center gap-4 last:hidden sm:last:flex">
       <div className="m-3 mb-0 flex gap-1 lg:!gap-1">
@@ -22,23 +22,26 @@ const Digits = ({ value, unit, classNames }: digitProps) => {
           .split("")
           .map((digit, index) => (
             <div
-              className={`flex items-center justify-center rounded ${classNames.background} bg-opacity-40 p-3 text-lg font-bold ${classNames.digit} lg:min-w-11 lg:p-3 lg:text-3xl`}
+              className={`flex items-center justify-center rounded font-bold ${classNames.digit || ""} mt-10 text-7xl lg:min-w-11`}
               key={index}
             >
               {digit}
             </div>
           ))}
       </div>
-      <div className={`m-2 mt-0 text-xs ${classNames.unit}`}>{unit}</div>
     </div>
   );
 };
 
 interface countdownProps {
   classNames: {
-    unit: string;
-    digit: string;
-    background: string;
+    days?: UnitStyle;
+    hours?: UnitStyle;
+    minutes?: UnitStyle;
+    seconds?: UnitStyle;
+    digit?: string;
+    background?: string;
+    unit?: string;
   };
 }
 
@@ -51,6 +54,8 @@ const Countdown = ({ classNames }: countdownProps) => {
   });
 
   useEffect(() => {
+    if (!data?.end) return;
+
     const interval = setInterval(() => {
       const timeLeft = data.end.getTime() - new Date().getTime();
       if (timeLeft <= 0) {
@@ -70,10 +75,17 @@ const Countdown = ({ classNames }: countdownProps) => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center font-bold">
-      {Object.entries(countdown).map(([unit, value], index) => (
-        <Digits key={index} unit={unit} value={value} classNames={classNames} />
-      ))}
+    <div className="flex -translate-y-14 items-center justify-center gap-9 font-bold">
+      {Object.entries(countdown).map(([unit, value], index) => {
+        const styleSource = classNames[unit as keyof typeof classNames];
+
+        const specificStyle: UnitStyle =
+          typeof styleSource === "object"
+            ? styleSource
+            : { digit: classNames.digit, background: classNames.background };
+
+        return <Digits key={index} value={value} classNames={specificStyle} />;
+      })}
     </div>
   );
 };

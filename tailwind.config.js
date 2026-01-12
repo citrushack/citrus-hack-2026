@@ -14,6 +14,10 @@ module.exports = {
       fontFamily: {
         "allerta-stencil": ["var(--font-allerta-stencil)", "sans-serif"],
         "indie-flower": ["var(--font-indie-flower)", "cursive"],
+        "croissant-one": ["var(--font-croissant-one)", "serif"],
+        "eagle-lake": ["var(--font-eagle-lake)", "serif"],
+        "denk-one": ["var(--font-denk-one)", "sans-serif"],
+        dhurjati: ["var(--font-dhurjati)", "sans-serif"],
       },
       colors: {
         citrushack: {
