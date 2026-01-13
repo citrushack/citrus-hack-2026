@@ -5,12 +5,12 @@ import countdownBG from "@/public/landing/countdownBG.webp";
 import coffee from "@/public/landing/Coffee.png";
 import folder from "@/public/landing/Folder.png";
 import newsletter from "@/public/landing/Newsletter.png";
-import about from "@/public/landing/About.png"
+import about from "@/public/landing/About.png";
 
 const Landing = () => {
   return (
     <div className="flex w-full flex-col items-center gap-10 pt-20 text-white lg:flex-row-reverse lg:items-start lg:justify-between">
-      <div className="flex w-full flex-col items-center lg:items-end lg:relative lg:-left-40">
+      <div className="flex w-full flex-col items-center lg:relative lg:-left-40 lg:items-end">
         <div className="flex flex-wrap items-center justify-center gap-7 lg:justify-end">
           <Image src={citrusHackLogo} alt="Citrus Hack 2026 Logo" />
           <div className="mt-4 text-center lg:text-right">
@@ -57,7 +57,12 @@ const Landing = () => {
       </div>
 
       <div>
-        <Image src={about} alt="About background" className="absolute right-40 bottom-40" priority />
+        <Image
+          src={about}
+          alt="About background"
+          className="absolute bottom-40 right-40"
+          priority
+        />
       </div>
 
       <div className="relative h-[560px] w-full max-w-[560px] self-center lg:self-auto">
@@ -76,7 +81,7 @@ const Landing = () => {
         <Image
           src={coffee}
           alt="Coffee cup"
-          className="absolute top-[46vh] left-[6.5vw] scale-110"
+          className="absolute left-[6.5vw] top-[46vh] scale-110"
           priority
         />
       </div>
