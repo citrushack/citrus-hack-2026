@@ -13,7 +13,7 @@ const Live = () => {
   return (
     <>
       <Landing />
-      <About />
+      {/* <About />
       <Tracks />
       <Schedule />
       <Sponsors />
@@ -21,7 +21,7 @@ const Live = () => {
       <Committees />
       <Judges />
       <FAQ />
-      <Footer />
+      <Footer /> */}
     </>
   );
 };
