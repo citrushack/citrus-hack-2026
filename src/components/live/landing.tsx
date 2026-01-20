@@ -6,6 +6,36 @@ import coffee from "@/public/landing/Coffee.png";
 import folder from "@/public/landing/Folder.png";
 import newsletter from "@/public/landing/Newsletter.png";
 import about from "@/public/landing/About.png";
+import apply from "@/public/landing/Register Note.png";
+import Link from "next/link";
+
+type FormLink = {
+  title: string;
+  link: string;
+};
+
+const FORM_LINKS: FormLink[] = [
+  {
+    title: "Hack",
+    link: "/apply/participant",
+  },
+  {
+    title: "Sponsor",
+    link: "/apply/sponsor",
+  },
+  {
+    title: "Judge",
+    link: "/apply/panel",
+  },
+  {
+    title: "Volunteer",
+    link: "/apply/volunteer",
+  },
+  {
+    title: "Mentor",
+    link: "/apply/mentor",
+  },
+];
 
 const Landing = () => {
   return (
@@ -65,25 +95,41 @@ const Landing = () => {
         />
       </div>
 
-      <div className="relative h-[560px] w-full max-w-[560px] self-center lg:self-auto">
-        <Image
-          src={newsletter}
-          alt="Newsletter clipping"
-          className="absolute top-[38vh]"
-          priority
-        />
-        <Image
-          src={folder}
-          alt="Folder background"
-          className="absolute left-16 scale-125"
-          priority
-        />
-        <Image
-          src={coffee}
-          alt="Coffee cup"
-          className="absolute left-[6.5vw] top-[46vh] scale-110"
-          priority
-        />
+      <div className="relative flex h-[1400px] w-full max-w-[1000px] flex-col self-center lg:self-auto">
+        <div className="h-[1300px]">
+          <Image
+            src={newsletter}
+            alt="Newsletter clipping"
+            className="absolute top-[38vh]"
+            priority
+          />
+          <Image
+            src={folder}
+            alt="Folder background"
+            className="absolute left-16 scale-125"
+            priority
+          />
+          <Image
+            src={coffee}
+            alt="Coffee cup"
+            className="absolute left-[6.5vw] top-[46vh] scale-110"
+            priority
+          />
+        </div>
+        <div className="relative left-2/4 flex flex-col items-center">
+          <Image src={apply} alt="Apply Sticky" priority />
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-4">
+            {FORM_LINKS.map((fl, i) => (
+              <Link
+                href={fl.link}
+                key={i}
+                className="w-3/12 rounded-full border-2 border-white bg-citrushack-brown p-4 text-center text-4xl font-bold shadow-lg shadow-white transition-transform delay-75 hover:scale-105"
+              >
+                {fl.title}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
