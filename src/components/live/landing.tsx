@@ -95,12 +95,12 @@ const Landing = () => {
         />
       </div>
 
-      <div className="relative flex h-[1400px] w-full max-w-[1000px] flex-col self-center lg:self-auto">
-        <div className="h-[1300px]">
+      <div className="relative flex h-[1600px] w-full max-w-[1000px] flex-col self-center lg:self-auto">
+        <div className="h-[1400px]">
           <Image
             src={newsletter}
             alt="Newsletter clipping"
-            className="absolute top-[38vh]"
+            className="absolute top-[52vh]"
             priority
           />
           <Image
@@ -112,11 +112,11 @@ const Landing = () => {
           <Image
             src={coffee}
             alt="Coffee cup"
-            className="absolute left-[6.5vw] top-[46vh] scale-110"
+            className="absolute left-[6.5vw] top-[62vh] scale-110"
             priority
           />
         </div>
-        <div className="relative left-2/4 flex flex-col items-center">
+        <div className="relative left-1/4 flex flex-col items-center">
           <Image src={apply} alt="Apply Sticky" priority />
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-4">
             {FORM_LINKS.map((fl, i) => (
