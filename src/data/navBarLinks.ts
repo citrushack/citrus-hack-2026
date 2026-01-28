@@ -14,7 +14,7 @@ export const navBarLinks = [
   },
   {
     name: "DISCORD",
-    link: "https://discord.gg/p6J4Vshh",
+    link: "https://discord.gg/FJhpdFG4",
     icon: FaDiscord,
   },
   {
