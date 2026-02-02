@@ -28,8 +28,10 @@ module.exports = {
           blueGray: "#4F5D75",
           beige: "#F0E0C6",
           red: "#FF0000",
+          brown: "#5F5548",
         },
       },
+
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

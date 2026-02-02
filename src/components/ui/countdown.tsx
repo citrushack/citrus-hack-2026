@@ -14,7 +14,7 @@ interface digitProps {
 
 const Digits = ({ value, classNames }: digitProps) => {
   return (
-    <div className="flex flex-col items-center gap-4 last:hidden sm:last:flex">
+    <div className="flex flex-col items-center gap-4">
       <div className="m-3 mb-0 flex gap-1 lg:!gap-1">
         {value
           .toString()
@@ -22,7 +22,7 @@ const Digits = ({ value, classNames }: digitProps) => {
           .split("")
           .map((digit, index) => (
             <div
-              className={`flex items-center justify-center rounded font-bold ${classNames.digit || ""} mt-10 text-7xl lg:min-w-11`}
+              className={`flex items-center justify-center rounded font-bold ${classNames.digit || ""} mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl`}
               key={index}
             >
               {digit}
@@ -75,7 +75,7 @@ const Countdown = ({ classNames }: countdownProps) => {
   }, []);
 
   return (
-    <div className="flex -translate-y-14 items-center justify-center gap-9 font-bold">
+    <div className="flex -translate-y-10 items-center justify-center gap-[22px] font-bold sm:-translate-y-10 sm:gap-[38px] md:-translate-y-12 md:gap-[62px] lg:gap-[50px]">
       {Object.entries(countdown).map(([unit, value], index) => {
         const styleSource = classNames[unit as keyof typeof classNames];
 
