@@ -31,6 +31,7 @@ module.exports = {
           brown: "#5F5548",
         },
       },
+
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
