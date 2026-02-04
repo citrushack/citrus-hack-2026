@@ -2,12 +2,12 @@ import Countdown from "../ui/countdown";
 import Image from "next/image";
 import citrusHackLogo from "@/public/landing/citrusHack2026Logo.webp";
 import countdownBG from "@/public/landing/countdownBG.webp";
-import coffee from "@/public/landing/Coffee.png";
-import folder from "@/public/landing/Folder.png";
-import newsletter from "@/public/landing/Newsletter.png";
-import about from "@/public/landing/About.png";
-import apply from "@/public/landing/Register Note.png";
-import items from "@/public/landing/items.png";
+import coffee from "@/public/landing/Coffee.webp";
+import folder from "@/public/landing/Folder.webp";
+import newsletter from "@/public/landing/Newsletter.webp";
+import about from "@/public/landing/About.webp";
+import apply from "@/public/landing/webp Note.webp";
+import items from "@/public/landing/items.webp";
 import Link from "next/link";
 
 type FormLink = {

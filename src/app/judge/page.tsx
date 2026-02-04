@@ -21,7 +21,7 @@ const Page = () => {
 
         <div className="mt-10 flex flex-col gap-2 md:flex-row">
           <Button className="text-md from-hackathon-tags-green-bg to-hackathon-green-300 bg-gradient-to-r text-black">
-            <Link href="/judge/register">Register</Link>
+            <Link href="/judge/register">webp</Link>
           </Button>
 
           <Button className="text-md from-hackathon-tags-green-bg to-hackathon-green-300 bg-gradient-to-r text-black">

@@ -1,7 +1,7 @@
 import Judge from "@/components/form/judge";
 
 export const metadata = {
-  title: "Judge | Register",
+  title: "Judge | webp",
 };
 
 export default Judge;
