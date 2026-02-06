@@ -9,7 +9,7 @@ const NavBar = () => {
   const pathName = usePathname();
 
   return (
-    <div className="fixed left-1/2 top-10 z-50 flex w-2/3 -translate-x-1/2 items-center justify-between rounded-full border-2 border-white bg-citrushack-brown p-6 shadow-[0_0_15px_2px_rgba(255,255,255,0.3)] md:w-1/3">
+    <div className="fixed left-1/2 z-50 mt-10 flex w-1/2 -translate-x-1/2 items-center justify-between rounded-full border-2 border-white bg-citrushack-brown p-2 shadow-md shadow-white md:w-2/5 md:p-6 lg:w-2/5">
       {navBarLinks.map((item, index) => {
         const isActive = pathName === item.link;
 
@@ -26,12 +26,12 @@ const NavBar = () => {
               <Image
                 src={item.icon}
                 alt={`${item.name} Logo`}
-                className="h-10 w-10 md:h-14 md:w-14"
+                className="h-6 w-6 sm:h-8 sm:w-8 md:h-8 md:w-8 lg:h-10 lg:w-10 xl:h-12 xl:w-12"
                 priority
               />
             ) : (
               // @ts-expect-error: Item.icon is a component here
-              <item.icon className="size-8 md:size-10" />
+              <item.icon className="h-6 w-6 sm:h-8 sm:w-8 md:h-8 md:w-8 lg:h-10 lg:w-10 xl:h-12 xl:w-12" />
             )}
           </Link>
         );

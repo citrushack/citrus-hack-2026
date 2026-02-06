@@ -22,9 +22,9 @@ interface DigitProps {
 
 const Digits = ({ value, classNames, icon }: DigitProps) => {
   return (
-    <div className="flex flex-col items-center gap-5">
+    <div className="flex flex-col items-center gap-2">
       <div
-        className={`m-4 mb-0 flex items-center justify-center gap-2 ${classNames.background || ""}`}
+        className={`mx-2 my-0 flex items-center justify-center gap-2 lg:mx-3 xl:mx-2 ${classNames.background || ""}`}
       >
         {value
           .toString()
@@ -33,7 +33,7 @@ const Digits = ({ value, classNames, icon }: DigitProps) => {
           .map((digit, index) => (
             <div
               key={index}
-              className="mt-8 flex -translate-y-4 items-center justify-center font-allerta-stencil text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl"
+              className="mt-8 flex -translate-y-4 items-center justify-center font-allerta-stencil text-2xl font-bold md:text-3xl lg:text-4xl xl:text-5xl"
             >
               {digit}
             </div>
@@ -41,7 +41,7 @@ const Digits = ({ value, classNames, icon }: DigitProps) => {
       </div>
 
       {icon && (
-        <Image src={icon} alt="unit icon" className="w-20 md:w-24 lg:w-32" />
+        <Image src={icon} alt="unit icon" className="w-[12vw] md:w-[7vw]" />
       )}
     </div>
   );
@@ -98,7 +98,7 @@ const Countdown = ({ classNames }: CountdownProps) => {
   }, []);
 
   return (
-    <div className="flex scale-110 items-center justify-center gap-2 font-bold">
+    <div className="flex scale-110 items-center justify-center font-bold">
       {Object.entries(countdown).map(([unit, value], index) => {
         const styleSource = classNames[unit as keyof typeof classNames];
 
