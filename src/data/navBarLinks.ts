@@ -1,7 +1,14 @@
 import { Instagram, Linkedin, Mail } from "lucide-react";
 import { FaDiscord } from "react-icons/fa";
+import citrusHackLogo from "@/public/landing/citrusHack2026Logo.webp";
 
 export const navBarLinks = [
+  {
+    name: "HOME",
+    link: "/",
+    icon: citrusHackLogo,
+    isImage: true,
+  },
   {
     name: "INSTAGRAM",
     link: "https://www.instagram.com/citrushack_ucr/",
