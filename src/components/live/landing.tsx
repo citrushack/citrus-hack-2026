@@ -11,6 +11,7 @@ import detectiveItems from "@/public/landing/detectiveItems.webp";
 import aboutUs from "@/public/landing/aboutUs.webp";
 import folderNewspaperMobile from "@/public/landing/folderNewspaperMobile.webp";
 import madeWithLove from "@/public/landing/madeWithLove.webp";
+import NavBar from "@/components/live/NavBar";
 import { formLinks } from "@/data/formLinks";
 
 const sharedUnitStyle = {
@@ -21,6 +22,7 @@ const sharedUnitStyle = {
 const Landing = () => {
   return (
     <>
+      <NavBar />
       <Image
         src={mlhBadge}
         alt="MLH Badge"
