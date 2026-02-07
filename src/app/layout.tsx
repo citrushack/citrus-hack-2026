@@ -1,6 +1,5 @@
 /* eslint-disable new-cap */
 import "./globals.css";
-import NavBar from "@/components/live/NavBar";
 
 import {
   Allerta_Stencil as AllertaStencil,
@@ -71,7 +70,7 @@ const RootLayout = async ({ children }: Props) => {
         className={`${allertaStencil.variable} ${indieFlower.variable} ${croissantOne.variable} ${eagleLake.variable} ${denkOne.variable} ${dhurjati.variable} flex h-full flex-col`}
       >
         {" "}
-        <NavBar />
+        ``{" "}
         <div className="flex h-full w-full font-allerta-stencil">
           {children}
         </div>
