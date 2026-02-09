@@ -107,7 +107,7 @@ const Landing = () => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-12 md:flex-row xl:mt-44 md:mt-20">
+      <div className="flex flex-col items-center justify-center gap-12 md:mt-20 md:flex-row xl:mt-44">
         <Image
           src={aboutUs}
           alt="About Us"
