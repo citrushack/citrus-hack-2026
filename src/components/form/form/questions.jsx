@@ -228,7 +228,7 @@ const Questions = ({
         <Button
           onClick={() => onSubmit(setLoading, setState)}
           disabled={loading}
-          className="bg-[#5F5548] text-white transition-none hover:scale-100"
+          className="bg-[#5F5548] text-white transition-none hover:scale-105"
         >
           Submit
         </Button>

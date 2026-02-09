@@ -83,7 +83,7 @@ const Landing = () => {
                 <Link
                   href={fl.link}
                   key={i}
-                  className="rounded-full border-2 border-white bg-citrushack-brown p-4 text-center font-bold shadow-lg shadow-white hover:scale-105 md:text-xl lg:w-[14vw] lg:text-2xl xl:w-[12vw] xl:text-4xl"
+                  className="rounded-full border-2 border-white bg-citrushack-brown p-4 text-center font-bold shadow-lg shadow-white hover:scale-105 md:text-xl lg:w-[14vw] lg:text-2xl xl:w-[12vw]"
                 >
                   {fl.title}
                 </Link>
@@ -107,7 +107,7 @@ const Landing = () => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-12 md:flex-row xl:mt-44">
+      <div className="flex flex-col items-center justify-center gap-12 md:flex-row xl:mt-44 md:mt-20">
         <Image
           src={aboutUs}
           alt="About Us"
