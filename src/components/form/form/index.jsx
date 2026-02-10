@@ -6,7 +6,7 @@ import Questions from "./questions";
 import Confirmation from "./confirmation";
 import { signOut } from "@/utils/auth/auth-client";
 import Image from "next/image";
-import LOGO from "@/app/favicon.ico";
+import LOGO from "@/public/landing/citrusHack2026Logo.webp";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
