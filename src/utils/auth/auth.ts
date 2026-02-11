@@ -22,9 +22,7 @@ export const auth = betterAuth({
           emailVerified: !!profile.email_verified,
           firstName: profile.given_name || "",
           lastName: profile.family_name || "",
-          team: "",
           photo: profile.picture || "",
-          roles: {},
         };
       },
     },
