@@ -15,15 +15,16 @@ export const navBarLinks = [
     icon: Instagram,
   },
   {
-    name: "LINKEDIN",
-    link: "https://www.linkedin.com/company/citrushack/posts/?feedView=all",
-    icon: Linkedin,
-  },
-  {
     name: "DISCORD",
-    link: "https://discord.gg/FJhpdFG4",
+    link: "https://discord.gg/Pgqf8j7fF4",
     icon: FaDiscord,
   },
+  {
+    name: "LINKEDIN",
+    link: "https://www.linkedin.com/company/citrushack",
+    icon: Linkedin,
+  },
+
   {
     name: "EMAIL",
     link: "mailto:citrushack@gmail.com",
