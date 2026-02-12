@@ -23,11 +23,16 @@ const Landing = () => {
   return (
     <>
       <NavBar />
-      <Image
-        src={mlhBadge}
-        alt="MLH Badge"
-        className="absolute right-8 top-0 z-50 w-[12vw] sm:right-12 md:right-16"
-      />
+      <Link
+        href={new URL("https://www.mlh.com/seasons/2026/events")}
+        target="_blank"
+      >
+        <Image
+          src={mlhBadge}
+          alt="MLH Badge"
+          className="absolute right-8 top-0 z-50 w-[12vw] sm:right-12 md:right-16"
+        />
+      </Link>
 
       <div className="relative mt-28 flex w-full flex-col items-center justify-between text-white md:mt-32 md:flex-row">
         <div className="hidden md:absolute md:flex">
