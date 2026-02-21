@@ -10,7 +10,7 @@ import apply from "@/public/landing/apply.webp";
 import detectiveItems from "@/public/landing/detectiveItems.webp";
 import aboutUs from "@/public/landing/aboutUs.webp";
 import folderNewspaperMobile from "@/public/landing/folderNewspaperMobile.webp";
-import madeWithLove from "@/public/landing/madeWithLove.webp";
+import copyright from "@/public/landing/copyright.webp";
 import NavBar from "@/components/live/NavBar";
 import { formLinks } from "@/data/formLinks";
 
@@ -78,30 +78,27 @@ const Landing = () => {
               className="w-[30vw] md:w-[15vw]"
             />
 
-            <div className="relative hidden flex-wrap items-center justify-center gap-x-4 gap-y-4 md:flex">
-              {formLinks.map((fl, i) => (
+            <div className="grid grid-cols-6 gap-x-4 gap-y-4 px-4">
+              {formLinks.slice(0, 3).map((fl, i) => (
                 <Link
                   href={fl.link}
                   key={i}
-                  className="rounded-full border-2 border-white bg-citrushack-brown p-4 text-center font-bold shadow-lg shadow-white hover:scale-105 md:text-xl lg:w-[14vw] lg:text-2xl xl:w-[12vw]"
+                  className="w-30 col-span-2 rounded-full border-2 border-white bg-citrushack-brown p-4 text-center text-sm font-bold shadow-lg shadow-white hover:scale-105 sm:text-base md:text-xl lg:text-2xl"
                 >
                   {fl.title}
                 </Link>
               ))}
-            </div>
-
-            <div className="relative z-10 grid w-full grid-cols-2 gap-x-16 gap-y-5 px-6 md:hidden md:gap-4 md:gap-x-10">
-              {formLinks.map((fl, i) => (
+              <div className="col-span-1 hidden md:block"></div>
+              {formLinks.slice(3, 5).map((fl, i) => (
                 <Link
                   href={fl.link}
-                  key={i}
-                  className={`sm:text-md rounded-full border-2 border-white bg-citrushack-brown p-4 text-center text-sm font-bold shadow-lg shadow-white hover:scale-105 md:text-lg ${
-                    i === formLinks.length - 1 ? "col-span-2 mx-auto w-2/3" : ""
-                  }`}
+                  key={i + 3}
+                  className="col-span-3 mx-auto w-24 rounded-full border-2 border-white bg-citrushack-brown p-4 text-center text-sm font-bold shadow-lg shadow-white hover:scale-105 sm:w-28 sm:text-base md:col-span-2 md:w-32 md:text-lg lg:w-36 lg:text-2xl xl:w-40"
                 >
                   {fl.title}
                 </Link>
               ))}
+              <div className="col-span-1 hidden md:block"></div>
             </div>
           </div>
         </div>
@@ -126,9 +123,10 @@ const Landing = () => {
         alt="Folder Newspaper Mobile"
         className="mt-16 w-full md:hidden"
       />
+
       <Image
-        src={madeWithLove}
-        alt="Made with Love"
+        src={copyright}
+        alt="Copyright"
         className="mx-auto w-1/2 md:w-1/3"
       />
     </>
