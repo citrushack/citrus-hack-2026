@@ -128,12 +128,20 @@ const Landing = () => {
         alt="Folder Newspaper Mobile"
         className="mt-16 w-full md:hidden"
       />
-
-      <Image
-        src={copyright}
-        alt="Copyright"
-        className="mx-auto w-1/2 md:w-1/3"
-      />
+      <Link
+        href={
+          new URL(
+            "https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md",
+          )
+        }
+        target="_blank"
+      >
+        <Image
+          src={copyright}
+          alt="Copyright"
+          className="mx-auto w-1/2 md:w-1/3"
+        />
+      </Link>
     </>
   );
 };
