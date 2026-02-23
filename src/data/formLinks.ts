@@ -1,6 +1,6 @@
 export const formLinks = [
   {
-    title: "Hack",
+    title: "Hacker",
     link: "/apply/participant",
   },
   {
