@@ -1121,6 +1121,7 @@ export const SCHOOLS: schools = [
   "Montville Township High School",
   "Moore College of Art and Design",
   "Moore Middle School",
+  "Moorpark College",
   "Moorestown High School",
   "Moraine Valley Community College",
   "Morehouse College",
