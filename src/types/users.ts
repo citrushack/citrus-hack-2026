@@ -48,7 +48,6 @@ export type Interest = {
 export type Judge = {
   photo: string;
   title: string;
-  company: string;
   affiliation:
     | "director"
     | "marketing"
@@ -71,7 +70,6 @@ export type Mentor = {
 } & User;
 
 export type Panelist = {
-  company: string;
   availability: string[];
   response: string;
 } & User;
