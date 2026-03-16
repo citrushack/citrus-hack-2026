@@ -52,6 +52,21 @@ export const COLUMNS: (ColumnDef<Panelist, string> & Column)[] = [
     ),
   },
   {
+    accessorKey: "company",
+    header: "Company",
+    enableColumnFilter: true,
+    filterFn: "includesString",
+    searchable: true,
+    cell: ({ row }) => (
+      <div
+        onClick={row.getToggleSelectedHandler()}
+        className="hover:cursor-pointer"
+      >
+        {row.getValue("company")}
+      </div>
+    ),
+  },
+  {
     accessorKey: "title",
     header: "Title",
     enableColumnFilter: true,
