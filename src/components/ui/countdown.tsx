@@ -98,7 +98,7 @@ const Countdown = ({ classNames }: CountdownProps) => {
   }, []);
 
   return (
-    <div className="flex scale-110 items-center justify-center font-bold">
+    <div className="flex scale-110 items-start justify-center font-bold">
       {Object.entries(countdown).map(([unit, value], index) => {
         const styleSource = classNames[unit as keyof typeof classNames];
 
