@@ -79,7 +79,7 @@ const Table = ({
             fetchMoreOnBottomReached(e.currentTarget);
           }}
         >
-          <TableHeader className="bg-hackathon-primary sticky top-0 z-10 grid rounded-t text-white">
+          <TableHeader className="bg-hackathon-primary sticky top-0 z-10 grid rounded-t text-black">
             {getHeaderGroups().map(({ headers, id }) => (
               <TableRow key={id} className="flex w-full justify-between">
                 {headers.map(({ id, column, getContext, getSize }) => (
