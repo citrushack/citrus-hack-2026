@@ -1,0 +1,39 @@
+import acm from "@/public/sponsors/acm.svg";
+import mlh from "@/public/sponsors/mlh.svg";
+import ucrBCOE from "@/public/sponsors/ucrBCOE.svg";
+import snapchat from "@/public/sponsors/snapchat.svg";
+import oreilly from "@/public/sponsors/oreilly.svg";
+import ucrgca from "@/public/sponsors/ucrgca.svg";
+import soundEthics from "@/public/sponsors/soundEthics.svg";
+import doordash from "@/public/sponsors/doordash.svg";
+import asucr from "@/public/sponsors/asucr.svg";
+import happyHacking from "@/public/sponsors/happyHacking.svg";
+import pureButtons from "@/public/sponsors/pureButtons.svg";
+import codeCrafterse from "@/public/sponsors/codeCrafterse.svg";
+import xyz from "@/public/sponsors/xyz.svg";
+import elevenLabs from "@/public/sponsors/elevenLabs.svg";
+import balsamIQ from "@/public/sponsors/balsamIQ.svg";
+import interviewCake from "@/public/sponsors/interviewCake.svg";
+import featherless from "@/public/sponsors/featherless.svg";
+import bada from "@/public/sponsors/bada.svg";
+
+export const sponsors = [
+  { image: acm },
+  { image: mlh },
+  { image: ucrBCOE },
+  { image: snapchat },
+  { image: oreilly },
+  { image: ucrgca },
+  { image: soundEthics },
+  { image: doordash },
+  { image: asucr },
+  { image: happyHacking },
+  { image: pureButtons },
+  { image: codeCrafterse },
+  { image: xyz },
+  { image: elevenLabs },
+  { image: balsamIQ },
+  { image: interviewCake },
+  { image: featherless },
+  { image: bada },
+];
