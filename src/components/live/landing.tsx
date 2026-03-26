@@ -140,13 +140,22 @@ const Landing = () => {
       <div className="mx-auto my-16 w-full px-4 sm:w-5/6 md:w-2/3 md:px-6">
         <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-12 lg:gap-24">
           {sponsors.map(
-            (sponsor: { image: StaticImageData | string }, index: number) => (
-              <Image
+            (
+              sponsor: { image: StaticImageData | string; link: string },
+              index: number,
+            ) => (
+              <Link
                 key={index}
-                src={sponsor.image}
-                alt={`Sponsor ${index + 1}`}
-                className="w-20 object-contain sm:w-28 md:w-32 lg:w-44"
-              />
+                href={sponsor.link}
+                target="_blank"
+                className="cursor-pointer"
+              >
+                <Image
+                  src={sponsor.image}
+                  alt={`Sponsor ${index + 1}`}
+                  className="w-20 object-contain sm:w-28 md:w-32 lg:w-44"
+                />
+              </Link>
             ),
           )}
         </div>
