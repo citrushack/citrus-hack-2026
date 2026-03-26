@@ -1,7 +1,7 @@
 "use client";
 
 import Countdown from "../ui/countdown";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import citrusHackLogo from "@/public/landing/citrusHack2026Logo.webp";
 import folderCoffeeNewspaper from "@/public/landing/folderCoffeeNewspaper.webp";
@@ -13,6 +13,8 @@ import folderNewspaperMobile from "@/public/landing/folderNewspaperMobile.webp";
 import copyright from "@/public/landing/copyright.webp";
 import NavBar from "@/components/live/NavBar";
 import { formLinks } from "@/data/formLinks";
+import { sponsors } from "@/data/sponsorData";
+import sponsorsHeader from "@/public/sponsors/Sponsors.svg";
 
 const sharedUnitStyle = {
   background:
@@ -128,6 +130,37 @@ const Landing = () => {
         alt="Folder Newspaper Mobile"
         className="mt-16 w-full md:hidden"
       />
+
+      <Image
+        src={sponsorsHeader}
+        alt="Sponsor Header"
+        className="mx-auto mt-12 w-[30vw] md:mt-16 md:w-[15vw] lg:mt-24"
+      />
+
+      <div className="mx-auto my-16 w-full px-4 sm:w-5/6 md:w-2/3 md:px-6">
+        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-12 lg:gap-24">
+          {sponsors.map(
+            (
+              sponsor: { image: StaticImageData | string; link: string },
+              index: number,
+            ) => (
+              <Link
+                key={index}
+                href={sponsor.link}
+                target="_blank"
+                className="cursor-pointer"
+              >
+                <Image
+                  src={sponsor.image}
+                  alt={`Sponsor ${index + 1}`}
+                  className="w-20 object-contain sm:w-28 md:w-32 lg:w-44"
+                />
+              </Link>
+            ),
+          )}
+        </div>
+      </div>
+
       <Link
         href={
           new URL(
@@ -139,7 +172,7 @@ const Landing = () => {
         <Image
           src={copyright}
           alt="Copyright"
-          className="mx-auto w-1/2 md:w-1/3"
+          className="mx-auto w-1/2 md:w-1/3 xl:w-1/5"
         />
       </Link>
     </>
