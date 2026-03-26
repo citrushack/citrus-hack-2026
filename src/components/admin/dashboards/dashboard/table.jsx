@@ -88,7 +88,7 @@ const Table = ({
                     className="flex"
                     style={{ width: getSize() }}
                   >
-                    <div className="flex items-center text-white">
+                    <div className="flex items-center text-black">
                       {flexRender(column.columnDef.header, getContext())}
                       {column.getCanSort() && (
                         <ArrowRightLeft

@@ -6,6 +6,7 @@ export type User = {
   lastName: string;
   email: string;
   status: StatusMapping;
+  company: string;
 };
 
 export type Admin = {
