@@ -10,7 +10,6 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
   Preview,
   Section,
   Text,
@@ -36,7 +35,7 @@ const Template = ({ children, name, preview }: props) => {
                 src={citrusLogo}
                 width="40"
                 height="37"
-                alt="Vercel"
+                alt="citrus logo"
                 className="mx-auto my-0"
               />
             </Section>
