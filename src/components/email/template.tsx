@@ -1,4 +1,8 @@
 import data from "@/data/config";
+import Image from "next/image";
+
+import citrusLogo from "@/public/landing/citrusHack2026Logo.webp";
+
 import {
   Body,
   Container,
@@ -28,8 +32,8 @@ const Template = ({ children, name, preview }: props) => {
         <Body className="mx-auto my-auto bg-white px-2 font-sans">
           <Container className="mx-auto my-[40px] max-w-[465px] rounded border border-solid border-[#eaeaea] p-[20px]">
             <Section className="mt-[32px]">
-              <Img
-                src="https://www.bearhack.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo.473367c8.webp&w=3840&q=75"
+              <Image
+                src={citrusLogo}
                 width="40"
                 height="37"
                 alt="Vercel"
