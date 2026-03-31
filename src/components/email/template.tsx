@@ -1,7 +1,4 @@
 import data from "@/data/config";
-import Image from "next/image";
-
-import citrusLogo from "@/public/landing/citrusHack2026Logo.webp";
 
 import {
   Body,
@@ -30,15 +27,6 @@ const Template = ({ children, name, preview }: props) => {
       <Tailwind>
         <Body className="mx-auto my-auto bg-white px-2 font-sans">
           <Container className="mx-auto my-[40px] max-w-[465px] rounded border border-solid border-[#eaeaea] p-[20px]">
-            <Section className="mt-[32px]">
-              <Image
-                src={citrusLogo}
-                width="40"
-                height="37"
-                alt="citrus logo"
-                className="mx-auto my-0"
-              />
-            </Section>
             <Heading className="mx-0 my-[30px] p-0 text-center text-[24px] font-normal text-black">
               Thank you for applying!
             </Heading>
