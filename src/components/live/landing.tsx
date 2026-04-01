@@ -144,7 +144,7 @@ const Landing = () => {
                 key={index}
                 href={sponsor.link}
                 target="_blank"
-                className="cursor-pointer hover:scale-110 transition-transform duration-400"
+                className="duration-400 cursor-pointer transition-transform hover:scale-110"
               >
                 <Image
                   src={sponsor.image}
