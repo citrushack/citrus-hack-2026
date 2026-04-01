@@ -133,7 +133,7 @@ const Landing = () => {
         className="mx-auto mt-12 w-[30vw] md:mt-16 md:w-[15vw] lg:mt-24"
       />
 
-      <div className="md: mx-auto my-16 w-full px-4 sm:w-5/6 md:px-6">
+      <div className="mx-auto my-4 w-full px-4 sm:w-5/6 md:px-6">
         <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-12 lg:gap-24">
           {sponsors.map(
             (
@@ -144,7 +144,7 @@ const Landing = () => {
                 key={index}
                 href={sponsor.link}
                 target="_blank"
-                className="cursor-pointer"
+                className="cursor-pointer hover:scale-110 transition-transform duration-400"
               >
                 <Image
                   src={sponsor.image}
