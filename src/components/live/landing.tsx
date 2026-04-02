@@ -32,7 +32,7 @@ const Landing = () => {
         <Image
           src={mlhBadge}
           alt="MLH Badge"
-          className="absolute right-8 top-0 z-50 w-[12vw] sm:right-12 md:right-16"
+          className="absolute right-8 top-0 z-50 w-[10vw] sm:right-12 md:right-16"
         />
       </Link>
 
@@ -45,12 +45,12 @@ const Landing = () => {
           />
         </div>
 
-        <div className="ml-auto flex w-full flex-col items-center md:mr-12 md:mt-20 md:w-1/2 lg:mr-16 lg:mt-32 xl:mr-60">
+        <div className="ml-auto flex w-full flex-col items-center md:mr-12 md:mt-10 md:w-1/2 lg:mr-16 xl:mr-60">
           <div className="flex justify-center gap-7">
             <Image
               src={citrusHackLogo}
               alt="Citrus Hack 2026 Logo"
-              className="h-auto w-[22vw] translate-y-2 object-contain sm:w-[20vw] md:w-[15vw] lg:w-[10vw]"
+              className="h-auto w-[12vw] translate-y-2 object-contain md:w-[7vw] lg:w-[7vw]"
             />
             <div className="mt-7">
               <p className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl">

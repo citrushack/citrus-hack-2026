@@ -9,7 +9,7 @@ const NavBar = () => {
   const pathName = usePathname();
 
   return (
-    <div className="fixed left-1/2 z-50 mt-10 flex w-1/2 -translate-x-1/2 items-center justify-between rounded-full border-2 border-white bg-citrushack-brown p-2 shadow-md shadow-white md:w-2/5 md:p-6 lg:w-2/5">
+    <div className="fixed left-1/2 z-50 flex w-1/2 -translate-x-1/2 items-center justify-between rounded-full border-2 border-white bg-citrushack-brown p-2 shadow-md shadow-white md:w-2/5 md:p-6 lg:w-2/5">
       {navBarLinks.map((item, index) => {
         const isActive = pathName === item.link;
 
