@@ -5,7 +5,7 @@ import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import citrusHackLogo from "@/public/landing/citrusHack2026Logo.webp";
 import folderCoffeeNewspaper from "@/public/landing/folderCoffeeNewspaper.webp";
-import mlhBadge from "@/public/landing/mlhBadge.webp";
+import mlhBadge from "@/public/landing/mlhBadge.svg";
 import apply from "@/public/landing/apply.webp";
 import detectiveItems from "@/public/landing/detectiveItems.webp";
 import aboutUs from "@/public/landing/aboutUs.webp";
@@ -32,7 +32,7 @@ const Landing = () => {
         <Image
           src={mlhBadge}
           alt="MLH Badge"
-          className="absolute right-8 top-0 z-50 w-[12vw] sm:right-12 md:right-16"
+          className="absolute right-8 top-0 z-50 w-[10vw] sm:right-12 md:right-16"
         />
       </Link>
 
@@ -45,18 +45,14 @@ const Landing = () => {
           />
         </div>
 
-        <div className="ml-auto flex w-full flex-col items-center md:mr-12 md:mt-20 md:w-1/2 lg:mr-16 lg:mt-32 xl:mr-60">
+        <div className="ml-auto flex w-full flex-col items-center md:mr-12 md:mt-10 md:w-1/2 lg:mr-16 xl:mr-60">
           <div className="flex justify-center gap-7">
             <Image
               src={citrusHackLogo}
               alt="Citrus Hack 2026 Logo"
-              className="h-auto w-[22vw] translate-y-2 object-contain sm:w-[20vw] md:w-[15vw] lg:w-[10vw]"
+              className="h-auto w-[12vw] translate-y-2 object-contain md:w-[7vw] lg:w-[7vw]"
             />
             <div className="mt-7">
-              <p className="mb-5 text-xl sm:text-2xl xl:text-3xl">
-                ACM PRESENTS...
-                <br />
-              </p>
               <p className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl">
                 CITRUS HACK
               </p>
@@ -64,7 +60,7 @@ const Landing = () => {
           </div>
 
           <p className="mt-4 text-xl sm:text-2xl xl:text-4xl">
-            APRIL 18-19, 2026 • UC RIVERSIDE
+            April 18-19, 2026 • UC Riverside
           </p>
 
           <div className="mt-4 md:mt-6">
@@ -90,7 +86,7 @@ const Landing = () => {
                 <Link
                   href={fl.link}
                   key={i}
-                  className="w-30 col-span-2 rounded-full border-2 border-white bg-citrushack-brown p-4 text-center text-sm font-bold shadow-lg shadow-white hover:scale-105 sm:text-base md:text-xl lg:text-2xl"
+                  className="w-30 col-span-2 rounded-full border-2 border-white bg-citrushack-brown p-4 text-center text-[12px] font-bold shadow-lg shadow-white hover:scale-105 sm:text-base md:text-xl lg:text-2xl"
                 >
                   {fl.title}
                 </Link>
@@ -100,7 +96,7 @@ const Landing = () => {
                 <Link
                   href={fl.link}
                   key={i + 3}
-                  className="col-span-3 mx-auto w-24 rounded-full border-2 border-white bg-citrushack-brown p-4 text-center text-sm font-bold shadow-lg shadow-white hover:scale-105 sm:w-28 sm:text-base md:col-span-2 md:w-32 md:text-lg lg:w-36 lg:text-2xl xl:w-40"
+                  className="col-span-3 mx-auto w-24 rounded-full border-2 border-white bg-citrushack-brown p-4 text-center text-[12px] font-bold shadow-lg shadow-white hover:scale-105 sm:w-28 sm:text-base md:col-span-2 md:w-32 md:text-lg lg:w-36 lg:text-2xl xl:w-40"
                 >
                   {fl.title}
                 </Link>
@@ -137,7 +133,7 @@ const Landing = () => {
         className="mx-auto mt-12 w-[30vw] md:mt-16 md:w-[15vw] lg:mt-24"
       />
 
-      <div className="mx-auto my-16 w-full px-4 sm:w-5/6 md:w-2/3 md:px-6">
+      <div className="mx-auto my-4 w-full px-4 sm:w-5/6 md:px-6">
         <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-12 lg:gap-24">
           {sponsors.map(
             (
@@ -148,12 +144,12 @@ const Landing = () => {
                 key={index}
                 href={sponsor.link}
                 target="_blank"
-                className="cursor-pointer"
+                className="duration-400 cursor-pointer transition-transform hover:scale-110"
               >
                 <Image
                   src={sponsor.image}
                   alt={`Sponsor ${index + 1}`}
-                  className="w-20 object-contain sm:w-28 md:w-32 lg:w-44"
+                  className="sm:w-18 lg:w-38 w-16 object-contain md:w-28"
                 />
               </Link>
             ),
