@@ -14,7 +14,7 @@ import copyright from "@/public/landing/copyright.webp";
 import NavBar from "@/components/live/NavBar";
 import { formLinks } from "@/data/formLinks";
 import { sponsors } from "@/data/sponsorData";
-import sponsorsHeader from "@/public/sponsors/Sponsors.svg";
+import sponsorsHeader from "@/public/sponsors/sponsors.svg";
 
 const sharedUnitStyle = {
   background:
@@ -111,7 +111,7 @@ const Landing = () => {
         <Image
           src={aboutUs}
           alt="About Us"
-          className="mt-10 md:translate-x-10 xl:ml-40"
+          className="mt-10 md:translate-x-10 md:translate-y-20 xl:ml-40"
         />
 
         <Image
@@ -149,7 +149,7 @@ const Landing = () => {
                 <Image
                   src={sponsor.image}
                   alt={`Sponsor ${index + 1}`}
-                  className="sm:w-18 lg:w-38 w-16 object-contain md:w-28"
+                  className="sm:w-18 lg:w-38 w-16 object-contain md:w-28 xl:w-44"
                 />
               </Link>
             ),
