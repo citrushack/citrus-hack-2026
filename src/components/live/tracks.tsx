@@ -35,8 +35,12 @@ const Tracks = () => {
 
   return (
     <div className="flex w-full flex-col items-center justify-center py-10">
-      <div className="mb-20 w-1/6">
-        <Image src={tracks} alt="tracks title" />
+      <div className="lg:mb-20">
+        <Image
+          src={tracks}
+          alt="tracks title"
+          className="w-[30vw] md:w-[15vw]"
+        />
       </div>
 
       <div className="mt-10 grid w-full max-w-4xl grid-cols-1 items-start gap-x-4 gap-y-2 px-4 md:grid-cols-2 lg:grid-cols-3">
