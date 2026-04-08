@@ -17,6 +17,20 @@ const DAY_SHORT: Record<string, string> = {
   Sunday: "Su",
 };
 
+const getStartAndEndOfWeek = (date: Date) => {
+  const start = new Date(date);
+  const day = start.getDay();
+  const diff = start.getDate() - day + (day === 0 ? -6 : 1);
+  start.setDate(diff);
+  start.setHours(0, 0, 0, 0);
+
+  const end = new Date(start);
+  end.setDate(start.getDate() + 6);
+  end.setHours(23, 59, 59, 999);
+
+  return { start, end };
+};
+
 const Events = ({ events, totalDays }: props) => {
   const [selectedDay, setSelectedDay] = useState(
     events.length > 0 && new Date() > new Date(events[0].start.dateTime)
@@ -27,13 +41,19 @@ const Events = ({ events, totalDays }: props) => {
       : "Monday",
   );
 
-  const filteredEvents = events.filter(
-    ({ start }) =>
-      new Date(start.dateTime).toLocaleString("en-US", {
-        timeZone: "America/Los_Angeles",
-        weekday: "long",
-      }) === selectedDay,
-  );
+  const { start: weekStart, end: weekEnd } = getStartAndEndOfWeek(new Date());
+
+  const filteredEvents = events.filter(({ start }) => {
+    const eventDate = new Date(start.dateTime);
+    const eventDay = eventDate.toLocaleString("en-US", {
+      timeZone: "America/Los_Angeles",
+      weekday: "long",
+    });
+
+    return (
+      eventDay === selectedDay && eventDate >= weekStart && eventDate <= weekEnd
+    );
+  });
 
   return (
     <div className="flex flex-col items-center justify-center gap-6">
