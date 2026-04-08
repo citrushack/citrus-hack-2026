@@ -9,7 +9,7 @@ export const QUESTIONS: QuestionAnswer[] = [
   {
     question: "When does Citrus Hack start?",
     answer:
-      "Citrus Hack kicks off on Saturday morning, April 18. Hacking begins at 9 AM PST.",
+      "Citrus Hack kicks off on Saturday morning, April 18. Hacking begins at 10 AM PST.",
   },
   {
     question: "Where is the hackathon?",
@@ -24,12 +24,12 @@ export const QUESTIONS: QuestionAnswer[] = [
   {
     question: "Is Citrus Hack free?",
     answer:
-      "Yes, Citrus Hack is completely free! Enjoy workshops, wonderful speakers, and best of all, the chance to win amazing prizes with no entry fee. 🤠",
+      "Yes, Citrus Hack is completely free! Enjoy workshops, wonderful speakers, and best of all, the chance to win amazing prizes with no entry fee.",
   },
   {
     question: "How long do I have to hack?",
     answer:
-      "You'll have 24 hours to hack at Citrus Hack! Project submissions must be finalized by 9 AM PST on April 19th.",
+      "You'll have 24 hours to hack at Citrus Hack! Project submissions must be finalized by 10 AM PST on April 19th.",
   },
   {
     question: "Do I have to hack or make a project?",
