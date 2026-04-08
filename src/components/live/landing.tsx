@@ -17,6 +17,7 @@ import { sponsors } from "@/data/sponsorData";
 import sponsorsHeader from "@/public/sponsors/Sponsors.svg";
 
 import Schedule from "./schedule";
+import FAQ from "@/components/live/faq";
 
 const sharedUnitStyle = {
   background:
@@ -160,7 +161,7 @@ const Landing = () => {
           )}
         </div>
       </div>
-
+      <FAQ />
       <Link
         href={
           new URL(
