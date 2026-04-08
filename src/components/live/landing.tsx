@@ -16,6 +16,9 @@ import { formLinks } from "@/data/formLinks";
 import { sponsors } from "@/data/sponsorData";
 import sponsorsHeader from "@/public/sponsors/sponsors.svg";
 
+import Schedule from "./schedule";
+import FAQ from "@/components/live/faq";
+
 const sharedUnitStyle = {
   background:
     "bg-citrushack-brown rounded-xl md:rounded-2xl lg:rounded-3xl border-2 border-white w-[12vw] h-[8vh] sm:w-[10vw] sm:h-[10vh] md:w-[8vw] md:h-[10vh] lg:w-[6vw] lg:h-[10vh] shadow-md shadow-white ",
@@ -127,6 +130,8 @@ const Landing = () => {
         className="mt-16 w-full md:hidden"
       />
 
+      <Schedule />
+
       <Image
         src={sponsorsHeader}
         alt="Sponsor Header"
@@ -156,7 +161,7 @@ const Landing = () => {
           )}
         </div>
       </div>
-
+      <FAQ />
       <Link
         href={
           new URL(
