@@ -17,6 +17,9 @@ import { sponsors } from "@/data/sponsorData";
 import sponsorsHeader from "@/public/sponsors/Sponsors.svg";
 
 import Tracks from "@/components/live/tracks";
+import Schedule from "./schedule";
+import FAQ from "@/components/live/faq";
+import LaserRoom from "@/public/landing/laserRoom.webp";
 
 const sharedUnitStyle = {
   background:
@@ -130,6 +133,7 @@ const Landing = () => {
       />
 
       <Tracks />
+      <Schedule />
 
       <Image
         src={sponsorsHeader}
@@ -160,21 +164,22 @@ const Landing = () => {
           )}
         </div>
       </div>
+      <FAQ />
+      <div className="relative mx-auto mt-12 w-screen">
+        <Image src={LaserRoom} alt="Laser Room footer" className="w-screen" />
 
-      <Link
-        href={
-          new URL(
-            "https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md",
-          )
-        }
-        target="_blank"
-      >
-        <Image
-          src={copyright}
-          alt="Copyright"
-          className="mx-auto w-1/2 md:w-1/3 xl:w-1/5"
-        />
-      </Link>
+        <Link
+          href={
+            new URL(
+              "https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md",
+            )
+          }
+          target="_blank"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2"
+        >
+          <Image src={copyright} alt="Copyright" className="w-11/12" />
+        </Link>
+      </div>
     </>
   );
 };
