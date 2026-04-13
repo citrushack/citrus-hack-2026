@@ -16,6 +16,7 @@ import { formLinks } from "@/data/formLinks";
 import { sponsors } from "@/data/sponsorData";
 import sponsorsHeader from "@/public/sponsors/Sponsors.svg";
 
+import Tracks from "@/components/live/tracks";
 import Schedule from "./schedule";
 import FAQ from "@/components/live/faq";
 import LaserRoom from "@/public/landing/laserRoom.webp";
@@ -131,6 +132,7 @@ const Landing = () => {
         className="mt-16 w-full md:hidden"
       />
 
+      <Tracks />
       <Schedule />
 
       <Image
