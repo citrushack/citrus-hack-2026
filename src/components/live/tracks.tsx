@@ -14,6 +14,8 @@ import track10 from "@/public/tracks/track10.webp";
 import track11 from "@/public/tracks/track11.webp";
 import track12 from "@/public/tracks/track12.webp";
 import track13 from "@/public/tracks/track13.webp";
+import track14 from "@/public/tracks/track14.webp";
+import track15 from "@/public/tracks/track15.webp";
 
 const Tracks = () => {
   const trackImages = [
@@ -29,8 +31,9 @@ const Tracks = () => {
     track10,
     track11,
     track12,
-    null,
+    track14,
     track13,
+    track15,
   ];
 
   return (
