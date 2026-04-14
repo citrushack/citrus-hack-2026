@@ -116,7 +116,7 @@ const NavBar = () => {
 
         <div className="flex flex-col gap-6">
           <Link
-            href="https://citrushack.com/user"
+            href="https://citrushack.com/user/participant"
             target="_blank"
             className="w-full rounded-full border-2 border-white px-4 py-2 text-center font-bold text-white shadow-[0_0_10px_rgba(255,255,255,0.5)] active:scale-95"
           >
