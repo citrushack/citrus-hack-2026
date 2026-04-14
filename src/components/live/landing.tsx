@@ -37,7 +37,7 @@ const Landing = () => {
         <Image
           src={mlhBadge}
           alt="MLH Badge"
-          className="absolute left-8 top-0 z-50 w-[15vw] sm:left-12 md:left-auto md:right-16 md:w-[10vw]"
+          className="absolute left-4 top-0 z-50 w-[12vw] sm:left-12 sm:w-[15vw] md:left-auto md:right-16 md:w-[10vw]"
         />
       </Link>
 
