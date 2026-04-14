@@ -11,7 +11,6 @@ import { GRADES } from "./information";
 import { GENDERS } from "./information";
 import { SHIRTS } from "./information";
 import { SCHOOLS } from "./schools";
-import data from "@/data/config";
 import { COUNTRIES } from "./countries";
 
 interface Attributes {
@@ -58,18 +57,8 @@ export const FIELDS: Fields = {
     input: "description",
     width: 12,
     texts: [
-      `Welcome to ${
-        data.name
-      }. Thank you for considering to become a participant, we appreciate your enthusiasm to join ${
-        data.name
-      }. ${data.name} is a ${data.description} hackathon spanning ${
-        data.length
-      } hours on ${data.date.toLocaleString("default", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      })}.`,
-      "Participants are not required to stay the full duration of the event, but are encouraged to checkout the various events, workshops, and opportunities that are available.",
+      `Welcome to Citrus Hack 2026! Thank you for considering to become a participant, we appreciate your enthusiasm to join us this year. Citrus Hack is the Association for Computing Machinery’s (ACM) 24 hour hackathon and one of the Inland Empire’s largest hackathons. Hackers can build projects to present to a panel of industry judges to compete for tracks and prizes! Throughout April 18-19, there will be free food, free swag, workshops, activities, and more.`,
+      "Participants are not required to stay the full duration of the event, but are encouraged to checkout the various events, workshops, and opportunities that are available. Judging will be fully in person.",
     ],
   },
   firstName: {
