@@ -15,7 +15,7 @@ import NavBar from "@/components/live/NavBar";
 import { formLinks } from "@/data/formLinks";
 import { sponsors } from "@/data/sponsorData";
 import sponsorsHeader from "@/public/sponsors/Sponsors.svg";
-
+import Judges from "@/components/live/judges";
 import Tracks from "@/components/live/tracks";
 import Schedule from "./schedule";
 import FAQ from "@/components/live/faq";
@@ -86,27 +86,16 @@ const Landing = () => {
               className="w-[30vw] md:w-[15vw]"
             />
 
-            <div className="grid grid-cols-6 gap-x-4 gap-y-4 px-4">
-              {formLinks.slice(0, 3).map((fl, i) => (
+            <div className="grid w-full grid-cols-2 gap-4 px-4 2xl:grid-cols-4">
+              {formLinks.map((fl, i) => (
                 <Link
                   href={fl.link}
                   key={i}
-                  className="w-30 col-span-2 rounded-full border-2 border-white bg-citrushack-brown p-4 text-center text-[12px] font-bold shadow-lg shadow-white hover:scale-105 sm:text-base md:text-xl lg:text-2xl"
+                  className="rounded-full border-2 border-white bg-citrushack-brown p-4 text-center text-[12px] font-bold shadow-lg shadow-white hover:scale-105 sm:text-base md:text-xl lg:text-2xl"
                 >
                   {fl.title}
                 </Link>
               ))}
-              <div className="col-span-1 hidden md:block"></div>
-              {formLinks.slice(3, 5).map((fl, i) => (
-                <Link
-                  href={fl.link}
-                  key={i + 3}
-                  className="col-span-3 mx-auto w-24 rounded-full border-2 border-white bg-citrushack-brown p-4 text-center text-[12px] font-bold shadow-lg shadow-white hover:scale-105 sm:w-28 sm:text-base md:col-span-2 md:w-32 md:text-lg lg:w-36 lg:text-2xl xl:w-40"
-                >
-                  {fl.title}
-                </Link>
-              ))}
-              <div className="col-span-1 hidden md:block"></div>
             </div>
           </div>
         </div>
@@ -164,7 +153,9 @@ const Landing = () => {
           )}
         </div>
       </div>
+      <Judges />
       <FAQ />
+
       <div className="relative mx-auto mt-12 w-screen">
         <Image src={LaserRoom} alt="Laser Room footer" className="w-screen" />
 
@@ -177,7 +168,7 @@ const Landing = () => {
           target="_blank"
           className="absolute bottom-4 left-1/2 -translate-x-1/2"
         >
-          <Image src={copyright} alt="Copyright" className="w-11/12" />
+          <Image src={copyright} alt="Copyright" className="w-auto" />
         </Link>
       </div>
     </>
