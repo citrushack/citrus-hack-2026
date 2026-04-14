@@ -37,7 +37,7 @@ const Landing = () => {
         <Image
           src={mlhBadge}
           alt="MLH Badge"
-          className="absolute right-8 top-0 z-50 w-[10vw] sm:right-12 md:right-16"
+          className="absolute left-8 top-0 z-50 w-[15vw] sm:left-12 md:left-auto md:right-16 md:w-[10vw]"
         />
       </Link>
 
@@ -101,11 +101,14 @@ const Landing = () => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-12 md:mt-20 md:flex-row xl:mt-44">
+      <div
+        id="about"
+        className="flex scroll-mt-32 flex-col items-center justify-center gap-12 md:mt-20 md:flex-row xl:mt-44"
+      >
         <Image
           src={aboutUs}
           alt="About Us"
-          className="mt-10 md:translate-x-10 xl:ml-40"
+          className="mt-10 md:translate-x-10 md:translate-y-20 xl:ml-40"
         />
 
         <Image
@@ -121,40 +124,52 @@ const Landing = () => {
         className="mt-16 w-full md:hidden"
       />
 
-      <Tracks />
-      <Schedule />
+      <div id="tracks" className="w-full scroll-mt-32">
+        <Tracks />
+      </div>
 
-      <Image
-        src={sponsorsHeader}
-        alt="Sponsor Header"
-        className="mx-auto mt-12 w-[30vw] md:mt-16 md:w-[15vw] lg:mt-24"
-      />
+      <div id="schedule" className="w-full scroll-mt-32">
+        <Schedule />
+      </div>
 
-      <div className="mx-auto my-4 w-full px-4 sm:w-5/6 md:px-6">
-        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-12 lg:gap-24">
-          {sponsors.map(
-            (
-              sponsor: { image: StaticImageData | string; link: string },
-              index: number,
-            ) => (
-              <Link
-                key={index}
-                href={sponsor.link}
-                target="_blank"
-                className="duration-400 cursor-pointer transition-transform hover:scale-110"
-              >
-                <Image
-                  src={sponsor.image}
-                  alt={`Sponsor ${index + 1}`}
-                  className="sm:w-18 lg:w-38 w-16 object-contain md:w-28"
-                />
-              </Link>
-            ),
-          )}
+      <div id="sponsors" className="w-full scroll-mt-32">
+        <Image
+          src={sponsorsHeader}
+          alt="Sponsor Header"
+          className="mx-auto mt-12 w-[30vw] md:mt-16 md:w-[15vw] lg:mt-24"
+        />
+        <div className="mx-auto my-4 w-full px-4 sm:w-5/6 md:px-6">
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-12 lg:gap-24">
+            {sponsors.map(
+              (
+                sponsor: { image: StaticImageData | string; link: string },
+                index: number,
+              ) => (
+                <Link
+                  key={index}
+                  href={sponsor.link}
+                  target="_blank"
+                  className="duration-400 cursor-pointer transition-transform hover:scale-110"
+                >
+                  <Image
+                    src={sponsor.image}
+                    alt={`Sponsor ${index + 1}`}
+                    className="sm:w-18 lg:w-38 w-16 object-contain md:w-28 xl:w-44"
+                  />
+                </Link>
+              ),
+            )}
+          </div>
         </div>
       </div>
-      <Judges />
-      <FAQ />
+
+      <div id="industry" className="w-full scroll-mt-32">
+        <Judges />
+      </div>
+
+      <div id="faq" className="w-full scroll-mt-32">
+        <FAQ />
+      </div>
 
       <div className="relative mx-auto mt-12 w-screen">
         <Image src={LaserRoom} alt="Laser Room footer" className="w-screen" />
