@@ -14,7 +14,7 @@ import copyright from "@/public/landing/copyright.webp";
 import NavBar from "@/components/live/NavBar";
 import { formLinks } from "@/data/formLinks";
 import { sponsors } from "@/data/sponsorData";
-import sponsorsHeader from "@/public/sponsors/sponsors.svg";
+import sponsorsHeader from "@/public/sponsors/Sponsors.svg";
 import Judges from "@/components/live/judges";
 import Tracks from "@/components/live/tracks";
 import Schedule from "./schedule";
@@ -37,7 +37,7 @@ const Landing = () => {
         <Image
           src={mlhBadge}
           alt="MLH Badge"
-          className="absolute right-8 top-0 z-50 w-[10vw] sm:right-12 md:right-16"
+          className="absolute left-8 top-0 z-50 w-[15vw] sm:left-12 md:left-auto md:right-16 md:w-[10vw]"
         />
       </Link>
 

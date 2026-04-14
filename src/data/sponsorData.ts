@@ -12,7 +12,7 @@ import pureButtons from "@/public/sponsors/pureButtons.svg";
 import codeCrafters from "@/public/sponsors/codeCrafters.svg";
 import xyz from "@/public/sponsors/xyz.svg";
 import elevenLabs from "@/public/sponsors/elevenLabs.svg";
-import balsamIQ from "@/public/sponsors/balsamiq.svg";
+import balsamIQ from "@/public/sponsors/balsamIQ.svg";
 import interviewCake from "@/public/sponsors/interviewCake.svg";
 import featherless from "@/public/sponsors/featherless.svg";
 import bada from "@/public/sponsors/bada.svg";
@@ -32,8 +32,8 @@ export const sponsors = [
   { image: codeCrafters, link: "https://codecrafters.io" },
   { image: xyz, link: "https://gen.xyz" },
   { image: elevenLabs, link: "https://elevenlabs.io" },
-  { image: balsamIQ, link: "https://balsamiq.com" },
+  { image: balsamIQ, link: "https://balsamique.com" },
   { image: interviewCake, link: "https://www.interviewcake.com" },
   { image: featherless, link: "https://featherless.ai" },
-  { image: bada, link: "https://www.badabeansnacks.com" },
+  { image: bada, link: "https://bada.ucr.edu" },
 ];
