@@ -20,6 +20,8 @@ import Tracks from "@/components/live/tracks";
 import Schedule from "./schedule";
 import FAQ from "@/components/live/faq";
 import LaserRoom from "@/public/landing/laserRoom.webp";
+import Team from "@/components/live/team";
+import Wine from "@/public/landing/wine.webp";
 
 const sharedUnitStyle = {
   background:
@@ -162,6 +164,11 @@ const Landing = () => {
           </div>
         </div>
       </div>
+      <div className="flex justify-end">
+        <Image src={Wine} alt="Wine" className="mt-12 w-[30vw]" />
+      </div>
+
+      <Team />
 
       <div id="industry" className="w-full scroll-mt-32">
         <Judges />
