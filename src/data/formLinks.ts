@@ -8,10 +8,6 @@ export const formLinks = [
     link: "/apply/sponsor",
   },
   {
-    title: "Judge",
-    link: "/apply/panel",
-  },
-  {
     title: "Volunteer",
     link: "/apply/volunteer",
   },

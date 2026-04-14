@@ -27,11 +27,12 @@ module.exports = {
           orange: "#EF8354",
           blueGray: "#4F5D75",
           beige: "#F0E0C6",
-          red: "#FF0000",
+          red: "#D92C2C",
+          maroon: "#5D0B0B",
           brown: "#5F5548",
+          charcoal: "#1A1A1A",
         },
       },
-
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
