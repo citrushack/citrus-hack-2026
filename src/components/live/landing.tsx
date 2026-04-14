@@ -16,6 +16,7 @@ import { formLinks } from "@/data/formLinks";
 import { sponsors } from "@/data/sponsorData";
 import sponsorsHeader from "@/public/sponsors/Sponsors.svg";
 import Judges from "@/components/live/judges";
+import Tracks from "@/components/live/tracks";
 import Schedule from "./schedule";
 import FAQ from "@/components/live/faq";
 import LaserRoom from "@/public/landing/laserRoom.webp";
@@ -85,7 +86,6 @@ const Landing = () => {
               className="w-[30vw] md:w-[15vw]"
             />
 
-            {/* Changed from lg:grid-cols-4 to 2xl:grid-cols-4 to keep 2 columns up to xl */}
             <div className="grid w-full grid-cols-2 gap-4 px-4 2xl:grid-cols-4">
               {formLinks.map((fl, i) => (
                 <Link
@@ -121,6 +121,7 @@ const Landing = () => {
         className="mt-16 w-full md:hidden"
       />
 
+      <Tracks />
       <Schedule />
 
       <Image
