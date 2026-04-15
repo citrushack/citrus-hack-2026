@@ -121,9 +121,13 @@ const Events = ({ events, totalDays }: props) => {
                         timeZone: "America/Los_Angeles",
                       })}
                     </p>
-                    <p className="flex w-full justify-center">{summary}</p>
-                    <p className="flex justify-center">{location ?? ""}</p>
-                    <p className="flex justify-center">
+                    <p className="flex w-full justify-center text-center">
+                      {summary}
+                    </p>
+                    <p className="flex justify-center text-center">
+                      {location ?? ""}
+                    </p>
+                    <p className="flex justify-center text-center">
                       {description?.split("\n")[0].slice(0) ?? ""}
                     </p>
                   </div>
