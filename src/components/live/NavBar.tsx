@@ -36,7 +36,7 @@ const NavBar = () => {
 
       <div className="hidden items-center gap-6 xl:flex 2xl:gap-10">
         <Link
-          href="https://citrushack.com/user/participants"
+          href="https://www.citrushack.com/apply/participant"
           target="_blank"
           className="rounded-full border-2 border-white px-5 py-1.5 text-sm font-bold text-white shadow-[0_0_15px_rgba(255,255,255,0.6)] transition-all hover:scale-105 2xl:px-8 2xl:py-2.5 2xl:text-lg"
         >
