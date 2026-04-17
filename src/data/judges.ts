@@ -1,7 +1,6 @@
 import Aaditya from "@/public/judges/Aaditya.webp";
 import Advaith from "@/public/judges/Advaith.webp";
 import Alekhya from "@/public/judges/Alekhya.webp";
-import Aneri from "@/public/judges/Aneri.webp";
 import Avo from "@/public/judges/Avo.webp";
 import Bhaskar from "@/public/judges/Bhaskar.webp";
 import Chalapathi from "@/public/judges/Chalapathi.webp";
@@ -16,7 +15,6 @@ import Lalan from "@/public/judges/Lalan.webp";
 import Lovleen from "@/public/judges/Lovleen.webp";
 import Natalie from "@/public/judges/Natalie.webp";
 import Nikhil from "@/public/judges/Nikhil.webp";
-import Rahul from "@/public/judges/Rahul.webp";
 import Tanish from "@/public/judges/Tanish.webp";
 import Vaibhava from "@/public/judges/Vaibhava.webp";
 import Varun from "@/public/judges/Varun.webp";
@@ -36,11 +34,6 @@ export const judges = [
     image: Alekhya,
     role: "Sr. Systems Engineer (Information Security) @ Walmart",
     name: "Alekhya Digumarthy",
-  },
-  {
-    image: Aneri,
-    role: "Global Engineering Leader @ Amazon",
-    name: "Aneri Shah",
   },
   {
     image: Avo,
@@ -107,11 +100,6 @@ export const judges = [
     image: Nikhil,
     role: "Sr. Software Engineer @ Amazon",
     name: "Nikhil Kharwandikar",
-  },
-  {
-    image: Rahul,
-    role: "Sr. Technology Operations @ Walmart",
-    name: "Rahul Ravindran",
   },
   {
     image: Tanish,
