@@ -40,7 +40,7 @@ const NavBar = () => {
           target="_blank"
           className="rounded-full border-2 border-white px-5 py-1.5 text-sm font-bold text-white shadow-[0_0_15px_rgba(255,255,255,0.6)] transition-all hover:scale-105 2xl:px-8 2xl:py-2.5 2xl:text-lg"
         >
-          Dashboard``
+          Dashboard
         </Link>
         {navBarTextLinks.map((item, index) => (
           <Link
