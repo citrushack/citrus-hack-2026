@@ -17,7 +17,6 @@ import { sponsors } from "@/data/sponsorData";
 import sponsorsHeader from "@/public/sponsors/Sponsors.svg";
 import Judges from "@/components/live/judges";
 import Tracks from "@/components/live/tracks";
-import Schedule from "./schedule";
 import FAQ from "@/components/live/faq";
 import LaserRoom from "@/public/landing/laserRoom.webp";
 import Team from "@/components/live/team";
@@ -28,7 +27,7 @@ const sharedUnitStyle = {
     "bg-citrushack-brown rounded-xl md:rounded-2xl lg:rounded-3xl border-2 border-white w-[12vw] h-[8vh] sm:w-[10vw] sm:h-[10vh] md:w-[8vw] md:h-[10vh] lg:w-[6vw] lg:h-[10vh] shadow-md shadow-white ",
 };
 
-const Landing = () => {
+const Landing = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <NavBar />
@@ -131,7 +130,7 @@ const Landing = () => {
       </div>
 
       <div id="schedule" className="w-full scroll-mt-32">
-        <Schedule />
+        {children}
       </div>
 
       <div id="sponsors" className="w-full scroll-mt-32">

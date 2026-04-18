@@ -33,7 +33,7 @@ const getStartAndEndOfWeek = (date: Date) => {
 
 const Events = ({ events, totalDays }: props) => {
   const [selectedDay, setSelectedDay] = useState(
-    events.length > 0 && new Date() > new Date(events[0].start.dateTime)
+    events?.length > 0 && new Date() > new Date(events[0].start.dateTime)
       ? new Date().toLocaleString("en-US", {
           timeZone: "America/Los_Angeles",
           weekday: "long",
@@ -43,17 +43,21 @@ const Events = ({ events, totalDays }: props) => {
 
   const { start: weekStart, end: weekEnd } = getStartAndEndOfWeek(new Date());
 
-  const filteredEvents = events.filter(({ start }) => {
-    const eventDate = new Date(start.dateTime);
-    const eventDay = eventDate.toLocaleString("en-US", {
-      timeZone: "America/Los_Angeles",
-      weekday: "long",
-    });
+  const filteredEvents = events
+    ? events.filter(({ start }) => {
+        const eventDate = new Date(start.dateTime);
+        const eventDay = eventDate.toLocaleString("en-US", {
+          timeZone: "America/Los_Angeles",
+          weekday: "long",
+        });
 
-    return (
-      eventDay === selectedDay && eventDate >= weekStart && eventDate <= weekEnd
-    );
-  });
+        return (
+          eventDay === selectedDay &&
+          eventDate >= weekStart &&
+          eventDate <= weekEnd
+        );
+      })
+    : [];
 
   return (
     <div className="flex flex-col items-center justify-center gap-6">
