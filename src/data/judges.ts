@@ -18,6 +18,10 @@ import Nikhil from "@/public/judges/Nikhil.webp";
 import Tanish from "@/public/judges/Tanish.webp";
 import Vaibhava from "@/public/judges/Vaibhava.webp";
 import Varun from "@/public/judges/Varun.webp";
+import James from "@/public/judges/James.webp";
+import Jon from "@/public/judges/Jon.webp";
+import Minnoli from "@/public/judges/Minnoli.webp";
+import Abdi from "@/public/judges/Abdi.webp";
 
 export const judges = [
   {
@@ -115,5 +119,25 @@ export const judges = [
     image: Varun,
     role: "Director Technical Architect @ Salesforce",
     name: "Varun Misra",
+  },
+  {
+    image: James,
+    role: "Executive Director @ Sound Ethics",
+    name: "James O’Brien",
+  },
+  {
+    image: Jon,
+    role: "Data Science Engineer @ Lucid Motors",
+    name: "Jonathan Darius",
+  },
+  {
+    image: Minnoli,
+    role: "Statistical Analyst @ Omega Healthcare",
+    name: "Minnoli Nori",
+  },
+  {
+    image: Abdi,
+    role: "Director of gBETA Inland Empire @ gener8tor",
+    name: "Abdi Sherif",
   },
 ];
