@@ -51,7 +51,7 @@ export const judges = [
   },
   {
     image: Chalapathi,
-    role: "Sr. Data Engineer @ Google",
+    role: "Sr. Data Engineer @ Amazon",
     name: "Chalapathi Koneni",
   },
   {
